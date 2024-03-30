@@ -67,7 +67,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "wlkmanist" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "Miguel A. Risco-Castillo (MRiscoC)" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 // @section machine
@@ -2422,30 +2422,30 @@
 //
 // Preheat Constants - Up to 10 are supported without changes
 //
-#define PREHEAT_1_LABEL       "PETG"
-#define PREHEAT_1_TEMP_HOTEND 235
-#define PREHEAT_1_TEMP_BED     75
-#define PREHEAT_1_FAN_SPEED   127 // Value from 0 to 255
+#define PREHEAT_1_LABEL       "PLA"
+#define PREHEAT_1_TEMP_HOTEND 210
+#define PREHEAT_1_TEMP_BED     60
+#define PREHEAT_1_FAN_SPEED    63 // Value from 0 to 255
 
-#define PREHEAT_2_LABEL       "PLA"
-#define PREHEAT_2_TEMP_HOTEND 190
-#define PREHEAT_2_TEMP_BED     55
+#define PREHEAT_2_LABEL       "ABS"
+#define PREHEAT_2_TEMP_HOTEND 240
+#define PREHEAT_2_TEMP_BED     75
 #define PREHEAT_2_FAN_SPEED   127 // Value from 0 to 255
 
-#define PREHEAT_3_LABEL       "TPU"
-#define PREHEAT_3_TEMP_HOTEND 230
-#define PREHEAT_3_TEMP_BED     80
-#define PREHEAT_3_FAN_SPEED   127 // Value from 0 to 255
+#define PREHEAT_3_LABEL       "Warmup"
+#define PREHEAT_3_TEMP_HOTEND 150
+#define PREHEAT_3_TEMP_BED     50
+#define PREHEAT_3_FAN_SPEED     0
 
-#define PREHEAT_4_LABEL       "Custom"
-#define PREHEAT_4_TEMP_HOTEND 240
-#define PREHEAT_4_TEMP_BED     60
+#define PREHEAT_4_LABEL       "Custom" // PETG
+#define PREHEAT_4_TEMP_HOTEND 235
+#define PREHEAT_4_TEMP_BED     75
 #define PREHEAT_4_FAN_SPEED   127 // Value from 0 to 255
 
-#define PREHEAT_5_LABEL       "Warmup"
-#define PREHEAT_5_TEMP_HOTEND 150
-#define PREHEAT_5_TEMP_BED     50
-#define PREHEAT_5_FAN_SPEED    63 // Value from 0 to 255
+//#define PREHEAT_5_LABEL       "TPU"
+//#define PREHEAT_5_TEMP_HOTEND 230
+//#define PREHEAT_5_TEMP_BED     80
+//#define PREHEAT_5_FAN_SPEED   127 // Value from 0 to 255
 
 // @section motion
 
@@ -2734,7 +2734,7 @@
 //
 //  Set this option if CLOCKWISE causes values to DECREASE
 //
-///#define REVERSE_ENCODER_DIRECTION   //Aquila enable -- Ender disable
+#define REVERSE_ENCODER_DIRECTION   //Aquila enable -- Ender disable
 
 //
 // This option reverses the encoder direction for navigating LCD menus.
@@ -3467,14 +3467,14 @@
   #if DISABLED(DISABLE_TUNING_GRAPH)
     #define PROUI_ITEM_PLOT     // Temperature Plot Graph item in Tune/Prepare Menu (688 bytes of flash)
   #endif
-  #define PROUI_ITEM_PLR        // Power-loss Recovery option in Tune Menu (POWER_LOSS_RECOVERY 3400 bytes of flash)
+  //#define PROUI_ITEM_PLR        // Power-loss Recovery option in Tune Menu (POWER_LOSS_RECOVERY 3400 bytes of flash)
   #define PROUI_ITEM_JD         // Juntion Deviation item in Tune Menu (only if JD is enabled)
   #define PROUI_ITEM_ADVK       // Linear Advance item in Tune Menu (only if LA is enabled)
   #define SHOW_REAL_POS
   #define CCLOUD_PRINT_SUPPORT  // Menu item: enable/disable Creality Cloud Print Support (192 bytes of flash)
   #define PROUI_ITEM_TRAM       // Menu item: enable Tramming Wizard (2304 bytes of flash)
   #define PROUI_MEDIASORT       // Menu item: enable/disable file list sorting (104 bytes of flash)
-  //#define ENC_MENU_ITEM       // Menu item: faster/slower encoder rate (272 bytes of flash)
+  #define ENC_MENU_ITEM         // Menu item: faster/slower encoder rate (272 bytes of flash)
   #define SHOW_SPEED_IND        // Menu item: blink speed in mm/s along with speed percentage (296 bytes of flash)
   //#define NO_BLINK_IND        // Disables dashboard icon blink indicator highlighted background
 
@@ -3553,7 +3553,7 @@
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
-#define FAN_SOFT_PWM  // Ender Configs ///
+#define FAN_SOFT_PWM  // Ender Configs
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.

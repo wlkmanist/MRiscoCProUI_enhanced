@@ -159,6 +159,14 @@
 #ifndef FAN0_PIN
   #define FAN0_PIN                          PA0   // FAN
 #endif
+
+#ifndef E0_AUTO_FAN_PIN
+  #define E0_AUTO_FAN_PIN                   PB0   // to BLTouch pin 3
+#endif
+#ifndef CONTROLLER_FAN_PIN
+  #define CONTROLLER_FAN_PIN                PB1   // to BLTouch pin 1
+#endif
+
 #define FAN_SOFT_PWM_REQUIRED
 
 //
@@ -178,8 +186,8 @@
  *       -----
  */
 
-#define DEBUG_02_PIN                        PA13
-#define DEBUG_03_PIN                        PA14
+//#define DEBUG_02_PIN                        PA13
+//#define DEBUG_03_PIN                        PA14
 
 #if ANY(RET6_12864_LCD, HAS_DWIN_E3V2, IS_DWIN_MARLINUI)
 
