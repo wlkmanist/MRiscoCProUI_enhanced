@@ -2731,6 +2731,61 @@
 #endif
 
 /**
+ * Up to 8 Extruder cooling fans
+ */
+#define _HAS_FAN_E_AUTO(N) (PIN_EXISTS(E##N##_AUTO_FAN))
+
+#if _HAS_FAN_E_AUTO(0)
+  #define HAS_FAN_E0_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(1)
+  #define HAS_FAN_E1_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(2)
+  #define HAS_FAN_E2_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(3)
+  #define HAS_FAN_E3_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(4)
+  #define HAS_FAN_E4_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(5)
+  #define HAS_FAN_E5_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(6)
+  #define HAS_FAN_E6_AUTO 1
+#endif
+#if _HAS_FAN_E_AUTO(7)
+  #define HAS_FAN_E7_AUTO 1
+#endif
+#undef _HAS_FAN_E_AUTO
+
+#if HAS_FAN7
+  #define EXTRUDER_AUTO_FAN_COUNT 8
+#elif HAS_FAN6
+  #define EXTRUDER_AUTO_FAN_COUNT 7
+#elif HAS_FAN5
+  #define EXTRUDER_AUTO_FAN_COUNT 6
+#elif HAS_FAN4
+  #define EXTRUDER_AUTO_FAN_COUNT 5
+#elif HAS_FAN3
+  #define EXTRUDER_AUTO_FAN_COUNT 4
+#elif HAS_FAN2
+  #define EXTRUDER_AUTO_FAN_COUNT 3
+#elif HAS_FAN1
+  #define EXTRUDER_AUTO_FAN_COUNT 2
+#elif HAS_FAN0
+  #define EXTRUDER_AUTO_FAN_COUNT 1
+#else
+  #define EXTRUDER_AUTO_FAN_COUNT 0
+#endif
+
+#if EXTRUDER_AUTO_FAN_COUNT > 0
+  #define HAS_EXTRUDER_AUTO_FAN 1
+#endif
+
+/**
  * MIN/MAX fan PWM scaling
  */
 #if ANY(HAS_FAN, USE_CONTROLLER_FAN)

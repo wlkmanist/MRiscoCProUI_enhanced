@@ -90,6 +90,10 @@
   #include "../../../feature/tmc_util.h"
 #endif
 
+#if ENABLED(CONTROLLER_FAN_MENU)
+  #include "../../feature/controllerfan.h"
+#endif
+
 #if ANY(HAS_GCODE_PREVIEW, CV_LASER_MODULE)
   #include "gcode_preview.h"
 #endif
@@ -139,6 +143,10 @@
 #if HAS_TRINAMIC_CONFIG
   #define MIN_TMC_CURRENT 100
   #define MAX_TMC_CURRENT 3000
+#endif
+
+#if ENABLED(CONTROLLER_FAN_MENU)
+  #define MAX_CONTROLLER_FAN_IDLE_TIME 4800
 #endif
 
 // Editable temperature limits
@@ -291,6 +299,12 @@ MenuClass *PIDMenu = nullptr;
 #endif
 #if HAS_TRINAMIC_CONFIG
   MenuClass *TrinamicConfigMenu = nullptr;
+#endif
+#if ANY(CONTROLLER_FAN_MENU, EXTRUDER_AUTO_FAN_MENU)
+  MenuClass *AdvancedFanMenu = nullptr;
+#endif
+#if ENABLED(CONTROLLER_FAN_MENU)
+  MenuClass *ControllerFanMenu = nullptr;
 #endif
 #if ENABLED(CV_LASER_MODULE)
   MenuClass *LaserSettings = nullptr;
@@ -2667,6 +2681,24 @@ void ApplyMove() {
   void SetFanSpeed() { SetIntOnClick(0, 255, thermalManager.fan_speed[EXT], ApplyFanSpeed); }
 #endif
 
+#if HAS_CONTROLLER_FAN
+  //uint8_t ConvertControllerFanSpeed(uint8_t val) {
+  //  return map(val, 0, 255, (CONTROLLERFAN_SPEED_MIN > 0 ? CONTROLLERFAN_SPEED_MIN : 1) - 1, 255);
+  //}
+
+  void SetControllerFanIdleSpeed() { SetIntOnClick((CONTROLLERFAN_SPEED_MIN > 0 ? CONTROLLERFAN_SPEED_MIN : 1) - 1, 255,
+          controllerFan.settings.idle_speed, []{ controllerFan.settings.idle_speed = MenuData.Value; }); }
+  void SetControllerFanSpeed() { SetIntOnClick((CONTROLLERFAN_SPEED_MIN > 0 ? CONTROLLERFAN_SPEED_MIN : 1) - 1, 255,
+          controllerFan.settings.active_speed, []{ controllerFan.settings.active_speed = MenuData.Value; }); }
+  void SetControllerFanDuration() { SetIntOnClick(1, 4800,
+          controllerFan.settings.duration, []{ controllerFan.settings.duration = MenuData.Value; }); }
+  void SetControllerFanAutoOn() { Toggle_Chkb_Line(controllerFan.settings.auto_mode); } ///     ReDrawMenu(true);
+#endif
+
+//#if HAS_EXTRUDER_AUTO_FAN
+//
+//#endif
+
 #if ENABLED(SHOW_SPEED_IND)
   void SetSpdInd() { Toggle_Chkb_Line(HMI_data.SpdInd); }
 #endif
@@ -3547,7 +3579,7 @@ void Draw_Tune_Menu() {
   void Draw_TrinamicConfig_menu() {
     checkkey = Menu;
     if (SET_MENU(TrinamicConfigMenu, MSG_TMC_DRIVERS, 5)) {
-      BACK_ITEM(Draw_AdvancedSettings_Menu);
+      BACK_ITEM(Draw_Advanced_Menu); /// !!! Commit this separately
       #if AXIS_IS_TMC(X)
         EDIT_ITEM(ICON_TMCXSet, MSG_TMC_ACURRENT, onDrawPIntMenu, SetXTMCCurrent, &stepperX.val_mA);
       #endif
@@ -3562,6 +3594,57 @@ void Draw_Tune_Menu() {
       #endif
     }
     UpdateMenu(TrinamicConfigMenu);
+  }
+
+#endif
+
+#if ANY(CONTROLLER_FAN_MENU, EXTRUDER_AUTO_FAN_MENU)
+  namespace GET_LANG(LCD_LANGUAGE) {
+    LSTR MSG_MISC_FANS                = _UxGT("Misc Fans");           /// TODO: proper locale
+    LSTR MSG_CONTROLLER_FAN           = _UxGT("Controller Fan");
+    LSTR MSG_KICKSTART_TIME           = _UxGT("Kickstart Time");
+    LSTR MSG_KICKSTART_POWER          = _UxGT("Kickstart Power");
+  }
+
+  /// TODO: add kickstart options, add extruder fan options
+
+  void Draw_AdvancedFan_menu();
+
+  void Draw_ControllerFan_menu() {
+    checkkey = Menu;
+    if (SET_MENU(ControllerFanMenu, MSG_CONTROLLER_FAN, 5)) {
+      BACK_ITEM(Draw_AdvancedFan_menu);
+
+      #if ENABLED(CONTROLLER_FAN_MENU)
+      EDIT_ITEM(ICON_FanSpeed, MSG_CONTROLLER_FAN_IDLE_SPEED, onDrawPInt8Menu, SetControllerFanIdleSpeed, &controllerFan.settings.idle_speed);
+      EDIT_ITEM(ICON_FanSpeed, MSG_CONTROLLER_FAN_AUTO_ON, onDrawChkbMenu, SetControllerFanAutoOn, &controllerFan.settings.auto_mode);
+      if (controllerFan.settings.auto_mode) {
+        EDIT_ITEM(ICON_FanSpeed, MSG_CONTROLLER_FAN_SPEED, onDrawPInt8Menu, SetControllerFanSpeed, &controllerFan.settings.active_speed);
+        EDIT_ITEM(ICON_RemainTime, MSG_CONTROLLER_FAN_DURATION, onDrawPIntMenu, SetControllerFanDuration, &controllerFan.settings.duration);
+      }
+      #endif
+    }
+    UpdateMenu(ControllerFanMenu);
+  }
+
+  void Draw_AdvancedFan_menu() {
+    checkkey = Menu;
+    if (SET_MENU(AdvancedFanMenu, MSG_MISC_FANS, 2)) {
+      BACK_ITEM(Draw_Advanced_Menu);
+
+      #if ENABLED(CONTROLLER_FAN_MENU)
+        MENU_ITEM(ICON_FanSpeed, MSG_CONTROLLER_FAN, onDrawSubMenu, Draw_ControllerFan_menu);
+      #endif
+
+      //#if (ENABLED(EXTRUDER_AUTO_FAN_MENU) && (HAS_EXTRUDER_AUTO_FAN))
+      ///// TODO: E_AUTO fans code here (check Marlin/src/module/temperature.cpp, line 1377, then Temperature::update_autofans())
+      //#endif
+
+      //#if ((FAN_KICKSTART_TIME > 0) && DISABLED(LASER_SYNCHRONOUS_M106_M107))
+      ///// TODO: kickstart code here
+      //#endif
+    }
+    UpdateMenu(AdvancedFanMenu);
   }
 
 #endif
@@ -4567,6 +4650,9 @@ void Draw_Advanced_Menu() { // From Control_Menu (Control) || Default-NP Advance
     EDIT_ITEM(ICON_File, MSG_MEDIA_UPDATE, onDrawChkbMenu, SetMediaAutoMount, &HMI_data.MediaAutoMount);
     #if HAS_TRINAMIC_CONFIG
       MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
+    #endif
+    #if ANY(CONTROLLER_FAN_MENU, EXTRUDER_AUTO_FAN_MENU)
+      MENU_ITEM(ICON_FanSpeed, MSG_MISC_FANS, onDrawSubMenu, Draw_AdvancedFan_menu);
     #endif
     #if ENABLED(PRINTCOUNTER)
       MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
