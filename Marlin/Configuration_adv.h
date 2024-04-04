@@ -596,9 +596,9 @@
   // Use TEMP_SENSOR_SOC as a trigger for enabling the controller fan
   //#define CONTROLLER_FAN_MIN_SOC_TEMP 40  // (°C) Turn on the fan if the SoC reaches this temperature
 
-  #define CONTROLLER_FAN_EDITABLE           // Enable M710 configurable settings
+  #define CONTROLLER_FAN_EDITABLE           // Enable M710 configurable settings (472 bytes of flash)
   #if ENABLED(CONTROLLER_FAN_EDITABLE)
-    #define CONTROLLER_FAN_MENU             // Enable the Controller Fan submenu
+    #define CONTROLLER_FAN_MENU             // Enable the Controller Fan submenu (456 bytes of flash)
   #endif
 #endif
 
@@ -608,9 +608,15 @@
  * gets it spinning reliably for a short time before setting the requested speed.
  * (Does not work on Sanguinololu with FAN_SOFT_PWM.)
  */
-#define FAN_KICKSTART_TIME  100  // (ms)
-#define FAN_KICKSTART_POWER 180  // 64-255
+#define FAN_KICKSTART_TIME  100             // (ms)
+#define FAN_KICKSTART_POWER 180             // 64-255
 
+#if FAN_KICKSTART_TIME
+  #define FAN_KICKSTART_EDITABLE            // Enable M711 configurable settings (320 bytes of flash)
+  #if ENABLED(FAN_KICKSTART_EDITABLE)
+    #define FAN_KICKSTART_MENU              // Enable the Fan Kickstart submenu  (384 bytes of flash)
+  #endif
+#endif
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
 
