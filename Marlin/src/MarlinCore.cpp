@@ -223,6 +223,10 @@
   #include "feature/fancheck.h"
 #endif
 
+#if ENABLED(FAN_KICKSTART_EDITABLE)
+  #include "feature/kickstart.h"
+#endif
+
 #if ENABLED(USE_CONTROLLER_FAN)
   #include "feature/controllerfan.h"
 #endif
@@ -1299,6 +1303,10 @@ void setup() {
 
   #if ENABLED(NEOPIXEL2_SEPARATE)
     SETUP_RUN(leds2.setup());
+  #endif
+
+  #if ENABLED(FAN_KICKSTART_EDITABLE)
+    SETUP_RUN(kickstart.setup());
   #endif
 
   #if ENABLED(USE_CONTROLLER_FAN)     // Set up fan controller to initialize also the default configurations.

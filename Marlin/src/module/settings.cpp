@@ -141,6 +141,8 @@
 
 #include "../feature/controllerfan.h"
 
+#include "../feature/kickstart.h"
+
 #if ENABLED(CASE_LIGHT_ENABLE)
   #include "../feature/caselight.h"
 #endif
@@ -444,6 +446,11 @@ typedef struct SettingsDataStruct {
   // Controller fan settings
   //
   controllerFan_settings_t controllerFan_settings;      // M710
+
+  //
+  // Fan Kickstart settings
+  //
+  kickstart_settings_t kickstart_settings;            // M711
 
   //
   // POWER_LOSS_RECOVERY
@@ -1327,6 +1334,19 @@ void MarlinSettings::postprocess() {
         constexpr controllerFan_settings_t cfs = controllerFan_defaults;
       #endif
       EEPROM_WRITE(cfs);
+    }
+
+    //
+    // Fan Kickstart
+    //
+    {
+      _FIELD_TEST(kickstart_settings);
+      #if ENABLED(FAN_KICKSTART_EDITABLE)
+        const kickstart_settings_t &fks = kickstart.settings;
+      #else
+        constexpr kickstart_settings_t fks = kickstart_defaults;
+      #endif
+      EEPROM_WRITE(fks);
     }
 
     //
@@ -2419,6 +2439,16 @@ void MarlinSettings::postprocess() {
         _FIELD_TEST(controllerFan_settings);
         EEPROM_READ(cfs);
         TERN_(CONTROLLER_FAN_EDITABLE, if (!validating) controllerFan.settings = cfs);
+      }
+
+      //
+      // Fan Kickstart
+      //
+      {
+        kickstart_settings_t fks = { 0 };
+        _FIELD_TEST(kickstart_settings);
+        EEPROM_READ(fks);
+        TERN_(FAN_KICKSTART_EDITABLE, if (!validating) kickstart.settings = fks);
       }
 
       //
@@ -3661,6 +3691,11 @@ void MarlinSettings::reset() {
   // Controller Fan
   //
   TERN_(USE_CONTROLLER_FAN, controllerFan.reset());
+
+  //
+  // Fan Kickstart
+  //
+  TERN_(FAN_KICKSTART_EDITABLE, kickstart.reset());
 
   //
   // Power-Loss Recovery
