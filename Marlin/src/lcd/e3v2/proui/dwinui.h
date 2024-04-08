@@ -32,7 +32,7 @@
 #define ICON_Binary           ICON_Contact
 #define ICON_BLtouchReset     ICON_ResetEEPROM
 #define ICON_Cancel           ICON_StockConfiguration
-#define ICON_CustomPreheat    ICON_BedTemp
+#define ICON_CustomPreheat    ICON_SetBedTemp
 #define ICON_Error            ICON_TempTooHigh
 #define ICON_ESDiag           ICON_Info
 #define ICON_ExtrudeMinT      ICON_HotendTemp
@@ -81,14 +81,14 @@
 #define ICON_ParkPosZ         ICON_StepZ
 #define ICON_PhySet           ICON_PrintSize
 #define ICON_PIDNozzle        ICON_HotendTemp
-#define ICON_PIDBed           ICON_BedTemp
+#define ICON_PIDBed           ICON_SetBedTemp
 #define ICON_PIDCycles        ICON_ResetEEPROM
 #define ICON_PIDValue         ICON_Contact
 #define ICON_PrintStats       ICON_PrintTime
 #define ICON_PrintStatsReset  ICON_RemainTime
-#define ICON_Preheat1         ICON_PLAPreheat
-#define ICON_Preheat2         ICON_ABSPreheat
-#define ICON_Preheat3         ICON_CustomPreheat
+#define ICON_Preheat1         ICON_CustomPreheat
+#define ICON_Preheat2         ICON_PLAPreheat
+#define ICON_Preheat3         ICON_ABSPreheat
 #define ICON_Preheat4         ICON_CustomPreheat
 #define ICON_Preheat5         ICON_CustomPreheat
 #define ICON_Preheat6         ICON_CustomPreheat
@@ -111,7 +111,7 @@
 #define ICON_Runout           ICON_MaxAccE
 #define ICON_Scolor           ICON_MaxSpeed
 #define ICON_SetBaudRate      ICON_Setspeed
-#define ICON_SetCustomPreheat ICON_BedTemp
+#define ICON_SetCustomPreheat ICON_SetBedTemp
 #define ICON_SetPreheat1      ICON_SetCustomPreheat
 #define ICON_SetPreheat2      ICON_SetPLAPreheat
 #define ICON_SetPreheat3      ICON_SetABSPreheat
