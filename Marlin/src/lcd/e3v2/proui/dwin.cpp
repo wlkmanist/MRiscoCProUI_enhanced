@@ -3609,15 +3609,6 @@ void Draw_Tune_Menu() {
     #endif
   #endif
 
-  #if ANY_AXIS_HAS(STEALTHCHOP)
-    namespace GET_LANG(LCD_LANGUAGE) {
-      LSTR MSG_TMC_ASTEALTH           = _UxGT(STR_A " " STR_TMC_STEALTH);
-      LSTR MSG_TMC_BSTEALTH           = _UxGT(STR_B " " STR_TMC_STEALTH);
-      LSTR MSG_TMC_CSTEALTH           = _UxGT(STR_C " " STR_TMC_STEALTH);
-      LSTR MSG_TMC_ESTEALTH           = _UxGT(STR_E " " STR_TMC_STEALTH);
-    }
-  #endif
-
   void Draw_TrinamicConfig_menu() {
     checkkey = Menu;
     if (SET_MENU(TrinamicConfigMenu, MSG_TMC_DRIVERS, 9)) {
@@ -3625,25 +3616,25 @@ void Draw_Tune_Menu() {
       #if AXIS_IS_TMC(X)
         EDIT_ITEM(ICON_TMCXSet, MSG_TMC_ACURRENT, onDrawPIntMenu, SetXTMCCurrent, &stepperX.val_mA);
         #if AXIS_HAS_STEALTHCHOP(X)
-          EDIT_ITEM(ICON_TMCXSet, MSG_TMC_ASTEALTH, onDrawChkbMenu, SetXTMCStealth, &stepperX.stored.stealthChop_enabled);
+          EDIT_ITEM_F(ICON_TMCXSet, STR_A " " STR_TMC_STEALTH, onDrawChkbMenu, SetXTMCStealth, &stepperX.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(Y)
         EDIT_ITEM(ICON_TMCYSet, MSG_TMC_BCURRENT, onDrawPIntMenu, SetYTMCCurrent, &stepperY.val_mA);
         #if AXIS_HAS_STEALTHCHOP(Y)
-          EDIT_ITEM(ICON_TMCYSet, MSG_TMC_BSTEALTH, onDrawChkbMenu, SetYTMCStealth, &stepperY.stored.stealthChop_enabled);
+          EDIT_ITEM_F(ICON_TMCYSet, STR_B " " STR_TMC_STEALTH, onDrawChkbMenu, SetYTMCStealth, &stepperY.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(Z)
         EDIT_ITEM(ICON_TMCZSet, MSG_TMC_CCURRENT, onDrawPIntMenu, SetZTMCCurrent, &stepperZ.val_mA);
         #if AXIS_HAS_STEALTHCHOP(Z)
-          EDIT_ITEM(ICON_TMCZSet, MSG_TMC_CSTEALTH, onDrawChkbMenu, SetZTMCStealth, &stepperZ.stored.stealthChop_enabled);
+          EDIT_ITEM_F(ICON_TMCZSet, STR_C " " STR_TMC_STEALTH, onDrawChkbMenu, SetZTMCStealth, &stepperZ.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(E0)
         EDIT_ITEM(ICON_TMCESet, MSG_TMC_ECURRENT, onDrawPIntMenu, SetETMCCurrent, &stepperE0.val_mA);
         #if AXIS_HAS_STEALTHCHOP(E0)
-          EDIT_ITEM(ICON_TMCESet, MSG_TMC_ESTEALTH, onDrawChkbMenu, SetETMCStealth, &stepperE0.stored.stealthChop_enabled);
+          EDIT_ITEM_F(ICON_TMCESet, STR_E " " STR_TMC_STEALTH, onDrawChkbMenu, SetETMCStealth, &stepperE0.stored.stealthChop_enabled);
         #endif
       #endif
     }
@@ -3653,20 +3644,6 @@ void Draw_Tune_Menu() {
 #endif
 
 #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
-  namespace GET_LANG(LCD_LANGUAGE) {
-    LSTR MSG_MISC_FANS                = _UxGT("Fans Settings");        /// TODO: proper locale
-    LSTR MSG_CONTROLLER_FAN           = _UxGT("Controller Fan");
-    LSTR MSG_FAN_KICKSTART            = _UxGT("Fan Kickstart");
-    LSTR MSG_FAN_KICKSTART_ENABLE     = _UxGT("Enable Kickstart");
-    LSTR MSG_FAN_KICKSTART_DURATION   = _UxGT("Kickstart Time");
-    LSTR MSG_FAN_KICKSTART_POWER      = _UxGT("Kickstart Power");
-    LSTR MSG_FAN_EXTRUDER_TEMP        = _UxGT("Extruder Fan Temp");
-    LSTR MSG_FAN_CHAMBER_TEMP         = _UxGT("Chamber Fan Temp");
-    LSTR MSG_FAN_COOLER_TEMP          = _UxGT("Cooler Fan Temp");
-  }
-
-  /// TODO: add extruder fan options
-
   void Draw_AdvancedFan_menu();
 
   #if ENABLED(CONTROLLER_FAN_MENU)
@@ -3704,7 +3681,7 @@ void Draw_Tune_Menu() {
 
   void Draw_AdvancedFan_menu() {
     checkkey = Menu;
-    if (SET_MENU(AdvancedFanMenu, MSG_MISC_FANS, 6)) {
+    if (SET_MENU(AdvancedFanMenu, MSG_FANS_SETTINGS, 6)) {
       BACK_ITEM(Draw_Advanced_Menu);
 
       #if ENABLED(FAN_KICKSTART_MENU)
@@ -4735,7 +4712,7 @@ void Draw_Advanced_Menu() { // From Control_Menu (Control) || Default-NP Advance
       MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
     #endif
     #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
-      MENU_ITEM(ICON_FanSpeed, MSG_MISC_FANS, onDrawSubMenu, Draw_AdvancedFan_menu);
+      MENU_ITEM(ICON_FanSpeed, MSG_FANS_SETTINGS, onDrawSubMenu, Draw_AdvancedFan_menu);
     #endif
     #if ENABLED(PRINTCOUNTER)
       MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
