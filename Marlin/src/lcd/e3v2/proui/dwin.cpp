@@ -3736,20 +3736,6 @@ void Draw_Tune_Menu() {
 #endif
 
 #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
-  namespace GET_LANG(LCD_LANGUAGE) {
-    LSTR MSG_MISC_FANS                = _UxGT("Fans Settings");        /// TODO: proper locale
-    LSTR MSG_CONTROLLER_FAN           = _UxGT("Controller Fan");
-    LSTR MSG_FAN_KICKSTART            = _UxGT("Fan Kickstart");
-    LSTR MSG_FAN_KICKSTART_ENABLE     = _UxGT("Enable Kickstart");
-    LSTR MSG_FAN_KICKSTART_DURATION   = _UxGT("Kickstart Time");
-    LSTR MSG_FAN_KICKSTART_POWER      = _UxGT("Kickstart Power");
-    LSTR MSG_FAN_EXTRUDER_TEMP        = _UxGT("Extruder Fan Temp");
-    LSTR MSG_FAN_CHAMBER_TEMP         = _UxGT("Chamber Fan Temp");
-    LSTR MSG_FAN_COOLER_TEMP          = _UxGT("Cooler Fan Temp");
-  }
-
-  /// TODO: add extruder fan options
-
   void Draw_AdvancedFan_menu();
 
   #if ENABLED(CONTROLLER_FAN_MENU)
@@ -3787,7 +3773,7 @@ void Draw_Tune_Menu() {
 
   void Draw_AdvancedFan_menu() {
     checkkey = Menu;
-    if (SET_MENU(AdvancedFanMenu, MSG_MISC_FANS, 6)) {
+    if (SET_MENU(AdvancedFanMenu, MSG_FANS_SETTINGS, 6)) {
       BACK_ITEM(Draw_Advanced_Menu);
 
       #if ENABLED(FAN_KICKSTART_MENU)
@@ -4861,7 +4847,7 @@ void Draw_AdvancedSettings_Menu() {
         MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
       #endif
       #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
-        MENU_ITEM(ICON_FanSpeed, MSG_MISC_FANS, onDrawSubMenu, Draw_AdvancedFan_menu);
+        MENU_ITEM(ICON_FanSpeed, MSG_FANS_SETTINGS, onDrawSubMenu, Draw_AdvancedFan_menu);
       #endif
       #if ENABLED(PRINTCOUNTER)
         MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
