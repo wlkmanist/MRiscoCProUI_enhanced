@@ -2772,18 +2772,18 @@
     #define FAN_MAX_PWM 255
   #endif
   #if FAN_MIN_PWM == 0 && FAN_MAX_PWM == 255
-    #define CALC_FAN_SPEED(f) (f ?: FAN_OFF_PWM)
+    #define CALC_FAN_SPEED(f) ((f) ?: FAN_OFF_PWM)
   #else
-    #define CALC_FAN_SPEED(f) (f ? map(f, 1, 255, FAN_MIN_PWM, FAN_MAX_PWM) : FAN_OFF_PWM)
+    #define CALC_FAN_SPEED(f) ((f) ? map(f, 1, 255, FAN_MIN_PWM, FAN_MAX_PWM) : FAN_OFF_PWM)
   #endif
   #if ENABLED(USE_CONTROLLER_FAN)
     #ifndef CONTROLLERFAN_SPEED_MAX
       #define CONTROLLERFAN_SPEED_MAX FAN_MAX_PWM
     #endif
     #if CONTROLLERFAN_SPEED_MIN == 0 && FAN_MAX_PWM == 255
-      #define CALC_CONTROLLER_FAN_SPEED(f) (f ?: FAN_OFF_PWM)
+      #define CALC_CONTROLLER_FAN_SPEED(f) ((f) ?: FAN_OFF_PWM)
     #else
-      #define CALC_CONTROLLER_FAN_SPEED(f) (f ? map(f, 1, 255, CONTROLLERFAN_SPEED_MIN, CONTROLLERFAN_SPEED_MAX) : FAN_OFF_PWM)
+      #define CALC_CONTROLLER_FAN_SPEED(f) ((f) ? map(f, 1, 255, CONTROLLERFAN_SPEED_MIN, CONTROLLERFAN_SPEED_MAX) : FAN_OFF_PWM)
     #endif
   #endif
 #endif
