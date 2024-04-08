@@ -93,10 +93,10 @@ void ControllerFan::update() {
       if (speed > FAN_OFF_PWM && kickstart.settings.enabled) {
         if (!fan_kick_end) {
           fan_kick_end = ms + kickstart.settings.duration_ms; // May be longer based on slow update interval for controller fn check. Sets minimum
-          speed = kickstart.settings.speed;
+          speed = map(kickstart.settings.speed, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
         }
         else if (PENDING(ms, fan_kick_end))
-          speed = kickstart.settings.speed;
+          speed = map(kickstart.settings.speed, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
       }
       #else
       if (speed > FAN_OFF_PWM) {
