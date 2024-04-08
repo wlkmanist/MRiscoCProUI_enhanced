@@ -2422,30 +2422,30 @@
 //
 // Preheat Constants - Up to 10 are supported without changes
 //
-#define PREHEAT_1_LABEL       "PLA"
-#define PREHEAT_1_TEMP_HOTEND 210
-#define PREHEAT_1_TEMP_BED     60
-#define PREHEAT_1_FAN_SPEED    63 // Value from 0 to 255
+#define PREHEAT_1_LABEL       "Warmup"
+#define PREHEAT_1_TEMP_HOTEND 150
+#define PREHEAT_1_TEMP_BED     50
+#define PREHEAT_1_FAN_SPEED     0
 
-#define PREHEAT_2_LABEL       "ABS"
-#define PREHEAT_2_TEMP_HOTEND 240
-#define PREHEAT_2_TEMP_BED     75
-#define PREHEAT_2_FAN_SPEED   127 // Value from 0 to 255
+#define PREHEAT_2_LABEL       "PLA"
+#define PREHEAT_2_TEMP_HOTEND 210
+#define PREHEAT_2_TEMP_BED     60
+#define PREHEAT_2_FAN_SPEED    63 // Value from 0 to 255
 
-#define PREHEAT_3_LABEL       "Warmup"
-#define PREHEAT_3_TEMP_HOTEND 150
-#define PREHEAT_3_TEMP_BED     50
-#define PREHEAT_3_FAN_SPEED     0
+#define PREHEAT_3_LABEL       "ABS"
+#define PREHEAT_3_TEMP_HOTEND 240
+#define PREHEAT_3_TEMP_BED     75
+#define PREHEAT_3_FAN_SPEED   127 // Value from 0 to 255
 
-#define PREHEAT_4_LABEL       "Custom" // PETG
+#define PREHEAT_4_LABEL       "PETG"
 #define PREHEAT_4_TEMP_HOTEND 235
 #define PREHEAT_4_TEMP_BED     75
 #define PREHEAT_4_FAN_SPEED   127 // Value from 0 to 255
 
-//#define PREHEAT_5_LABEL       "TPU"
-//#define PREHEAT_5_TEMP_HOTEND 230
-//#define PREHEAT_5_TEMP_BED     80
-//#define PREHEAT_5_FAN_SPEED   127 // Value from 0 to 255
+#define PREHEAT_5_LABEL       "Custom" // TPU
+#define PREHEAT_5_TEMP_HOTEND 230
+#define PREHEAT_5_TEMP_BED     80
+#define PREHEAT_5_FAN_SPEED   127 // Value from 0 to 255
 
 // @section motion
 
@@ -3560,13 +3560,13 @@
 // However, control resolution will be halved for each increment;
 // at zero value, there are 128 effective control positions.
 // :[0,1,2,3,4,5,6,7]
-#define SOFT_PWM_SCALE 2
+#define SOFT_PWM_SCALE 7
 
 // If SOFT_PWM_SCALE is set to a value higher than 0, dithering can
 // be used to mitigate the associated resolution loss. If enabled,
 // some of the PWM cycles are stretched so on average the desired
 // duty cycle is attained.
-//#define SOFT_PWM_DITHER
+#define SOFT_PWM_DITHER
 
 // @section extras
 

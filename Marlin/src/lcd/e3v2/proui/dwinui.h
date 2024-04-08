@@ -112,9 +112,9 @@
 #define ICON_Scolor           ICON_MaxSpeed
 #define ICON_SetBaudRate      ICON_Setspeed
 #define ICON_SetCustomPreheat ICON_BedTemp
-#define ICON_SetPreheat1      ICON_SetPLAPreheat
-#define ICON_SetPreheat2      ICON_SetABSPreheat
-#define ICON_SetPreheat3      ICON_SetCustomPreheat
+#define ICON_SetPreheat1      ICON_SetCustomPreheat
+#define ICON_SetPreheat2      ICON_SetPLAPreheat
+#define ICON_SetPreheat3      ICON_SetABSPreheat
 #define ICON_SetPreheat4      ICON_SetCustomPreheat
 #define ICON_SetPreheat5      ICON_SetCustomPreheat
 #define ICON_SetPreheat6      ICON_SetCustomPreheat

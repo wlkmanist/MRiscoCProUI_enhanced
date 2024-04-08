@@ -118,20 +118,20 @@ namespace LanguageNarrow_en {
   LSTR MSG_SELECT_ORIGIN                  = _UxGT("Select Origin");
   LSTR MSG_LAST_VALUE_SP                  = _UxGT("Last value ");
 
-  LSTR MSG_PREHEAT_1                      = _UxGT("Preheat ") PREHEAT_1_LABEL;
-  LSTR MSG_PREHEAT_1_H                    = _UxGT("Preheat ") PREHEAT_1_LABEL " ~";
-  LSTR MSG_PREHEAT_1_END                  = _UxGT("Preheat ") PREHEAT_1_LABEL _UxGT(" End");
-  LSTR MSG_PREHEAT_1_END_E                = _UxGT("Preheat ") PREHEAT_1_LABEL _UxGT(" End ~");
-  LSTR MSG_PREHEAT_1_ALL                  = _UxGT("Preheat ") PREHEAT_1_LABEL _UxGT(" All");
-  LSTR MSG_PREHEAT_1_BEDONLY              = _UxGT("Preheat ") PREHEAT_1_LABEL _UxGT(" Bed");
-  LSTR MSG_PREHEAT_1_SETTINGS             = _UxGT("Preheat ") PREHEAT_1_LABEL _UxGT(" Settings");
+  LSTR MSG_PREHEAT_1                      = PREHEAT_1_LABEL;
+  LSTR MSG_PREHEAT_1_H                    = PREHEAT_1_LABEL " ~";
+  LSTR MSG_PREHEAT_1_END                  = PREHEAT_1_LABEL _UxGT(" End");
+  LSTR MSG_PREHEAT_1_END_E                = PREHEAT_1_LABEL _UxGT(" End ~");
+  LSTR MSG_PREHEAT_1_ALL                  = PREHEAT_1_LABEL _UxGT(" All");
+  LSTR MSG_PREHEAT_1_BEDONLY              = PREHEAT_1_LABEL _UxGT(" Bed");
+  LSTR MSG_PREHEAT_1_SETTINGS             = PREHEAT_1_LABEL _UxGT(" Settings");
   #ifdef PREHEAT_2_LABEL
     LSTR MSG_PREHEAT_2                    = _UxGT("Preheat ") PREHEAT_2_LABEL;
     LSTR MSG_PREHEAT_2_SETTINGS           = _UxGT("Preheat ") PREHEAT_2_LABEL _UxGT(" Settings");
   #endif
   #ifdef PREHEAT_3_LABEL
-    LSTR MSG_PREHEAT_3                    = PREHEAT_3_LABEL;
-    LSTR MSG_PREHEAT_3_SETTINGS           = PREHEAT_3_LABEL _UxGT(" Settings");
+    LSTR MSG_PREHEAT_3                    = _UxGT("Preheat ") PREHEAT_3_LABEL;
+    LSTR MSG_PREHEAT_3_SETTINGS           = _UxGT("Preheat ") PREHEAT_3_LABEL _UxGT(" Settings");
   #endif
   LSTR MSG_PREHEAT_M                      = _UxGT("Preheat $");
   LSTR MSG_PREHEAT_M_H                    = _UxGT("Preheat $ ~");
