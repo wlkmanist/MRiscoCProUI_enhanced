@@ -2776,7 +2776,7 @@ void ApplyMove() {
 
   void SetControllerFanIdleSpeed() { SetIntOnClick(0, 255, controllerFan.settings.idle_speed, []{ controllerFan.settings.idle_speed = MenuData.Value; }); }
   void SetControllerFanSpeed() { SetIntOnClick(0, 255, controllerFan.settings.active_speed, []{ controllerFan.settings.active_speed = MenuData.Value; }); }
-  void SetControllerFanDuration() { SetIntOnClick(1, 4800, controllerFan.settings.duration, []{ controllerFan.settings.duration = MenuData.Value; }); }
+  void SetControllerFanDuration() { SetIntOnClick(1, MAX_CONTROLLER_FAN_IDLE_TIME, controllerFan.settings.duration, []{ controllerFan.settings.duration = MenuData.Value; }); }
   void SetControllerFanAutoOn() { controllerFan.settings.auto_mode ^= true; PrepareRefreshMenu(); Draw_ControllerFan_menu(); }
 #endif
 

@@ -28,6 +28,16 @@ typedef struct {
   uint8_t   cooler_temp;
 } autofans_settings_t;
 
+#ifndef EXTRUDER_AUTO_FAN_TEMPERATURE
+  #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
+#endif
+#ifndef CHAMBER_AUTO_FAN_TEMPERATURE
+  #define CHAMBER_AUTO_FAN_TEMPERATURE 30
+#endif
+#ifndef COOLER_AUTO_FAN_TEMPERATURE
+  #define COOLER_AUTO_FAN_TEMPERATURE 18
+#endif
+
 static constexpr autofans_settings_t autofans_defaults = {
   EXTRUDER_AUTO_FAN_TEMPERATURE,
   CHAMBER_AUTO_FAN_TEMPERATURE,
