@@ -98,6 +98,10 @@
   #include "../../feature/kickstart.h"
 #endif
 
+#if ENABLED(AUTO_FAN_MENU)
+  #include "../../feature/autofans.h"
+#endif
+
 #if ANY(HAS_GCODE_PREVIEW, CV_LASER_MODULE)
   #include "gcode_preview.h"
 #endif
@@ -319,6 +323,9 @@ MenuClass *PIDMenu = nullptr;
 #endif
 #if ENABLED(FAN_KICKSTART_MENU)
   MenuClass *KickstartMenu = nullptr;
+#endif
+#if ENABLED(AUTO_FAN_MENU)
+  MenuClass *AutofanMenu = nullptr;
 #endif
 #if ENABLED(CV_LASER_MODULE)
   MenuClass *LaserSettings = nullptr;
@@ -2783,9 +2790,11 @@ void ApplyMove() {
           kickstart.settings.duration_ms, []{ kickstart.settings.duration_ms = MenuData.Value; }); }
 #endif
 
-//#if HAS_EXTRUDER_AUTO_FAN
-//
-//#endif
+#if ENABLED(AUTO_FAN_MENU)
+  void SetExtruderFanSpeed() { SetIntOnClick(10, 120, autofans.settings.extruder_temp, []{ autofans.settings.extruder_temp = MenuData.Value; }); }
+  void SetChamberFanSpeed() { SetIntOnClick(10, 80, autofans.settings.chamber_temp, []{ autofans.settings.chamber_temp = MenuData.Value; }); }
+  void SetCoolerFanSpeed() { SetIntOnClick(10, 100, autofans.settings.cooler_temp, []{ autofans.settings.cooler_temp = MenuData.Value; }); }
+#endif
 
 #if ENABLED(SHOW_SPEED_IND)
   void SetSpdInd() { Toggle_Chkb_Line(HMI_data.SpdInd); }
@@ -3726,14 +3735,17 @@ void Draw_Tune_Menu() {
 
 #endif
 
-#if ANY(CONTROLLER_FAN_MENU, EXTRUDER_AUTO_FAN_MENU)
+#if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
   namespace GET_LANG(LCD_LANGUAGE) {
-    LSTR MSG_MISC_FANS                = _UxGT("Misc Fans");           /// TODO: proper locale
+    LSTR MSG_MISC_FANS                = _UxGT("Fans Settings");        /// TODO: proper locale
     LSTR MSG_CONTROLLER_FAN           = _UxGT("Controller Fan");
     LSTR MSG_FAN_KICKSTART            = _UxGT("Fan Kickstart");
     LSTR MSG_FAN_KICKSTART_ENABLE     = _UxGT("Enable Kickstart");
     LSTR MSG_FAN_KICKSTART_DURATION   = _UxGT("Kickstart Time");
     LSTR MSG_FAN_KICKSTART_POWER      = _UxGT("Kickstart Power");
+    LSTR MSG_FAN_EXTRUDER_TEMP        = _UxGT("Extruder Fan Temp");
+    LSTR MSG_FAN_CHAMBER_TEMP         = _UxGT("Chamber Fan Temp");
+    LSTR MSG_FAN_COOLER_TEMP          = _UxGT("Cooler Fan Temp");
   }
 
   /// TODO: add extruder fan options
@@ -3775,19 +3787,27 @@ void Draw_Tune_Menu() {
 
   void Draw_AdvancedFan_menu() {
     checkkey = Menu;
-    if (SET_MENU(AdvancedFanMenu, MSG_MISC_FANS, 3)) {
+    if (SET_MENU(AdvancedFanMenu, MSG_MISC_FANS, 6)) {
       BACK_ITEM(Draw_Advanced_Menu);
+
+      #if ENABLED(FAN_KICKSTART_MENU)
+        MENU_ITEM(ICON_Motion, MSG_FAN_KICKSTART, onDrawSubMenu, Draw_Kickstart_menu);
+      #endif
 
       #if ENABLED(CONTROLLER_FAN_MENU)
         MENU_ITEM(ICON_FanSpeed, MSG_CONTROLLER_FAN, onDrawSubMenu, Draw_ControllerFan_menu);
       #endif
 
-      //#if (ENABLED(EXTRUDER_AUTO_FAN_MENU) && (HAS_EXTRUDER_AUTO_FAN))
-      ///// TODO: E_AUTO fans code here (check Marlin/src/module/temperature.cpp, line 1377, then Temperature::update_autofans())
-      //#endif
-
-      #if ENABLED(FAN_KICKSTART_MENU)
-        MENU_ITEM(ICON_Motion, MSG_FAN_KICKSTART, onDrawSubMenu, Draw_Kickstart_menu);
+      #if (ENABLED(AUTO_FAN_MENU))
+        #if HAS_AUTO_EXTRUDER_FAN
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_EXTRUDER_TEMP, onDrawPInt8Menu, SetExtruderFanSpeed, &autofans.settings.extruder_temp);
+        #endif
+        #if HAS_AUTO_CHAMBER_FAN
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_CHAMBER_TEMP, onDrawPInt8Menu, SetChamberFanSpeed, &autofans.settings.chamber_temp);
+        #endif
+        #if HAS_AUTO_COOLER_FAN
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_COOLER_TEMP, onDrawPInt8Menu, SetCoolerFanSpeed, &autofans.settings.cooler_temp);
+        #endif
       #endif
     }
     UpdateMenu(AdvancedFanMenu);
@@ -4840,7 +4860,7 @@ void Draw_AdvancedSettings_Menu() {
       #if HAS_TRINAMIC_CONFIG
         MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
       #endif
-      #if ANY(CONTROLLER_FAN_MENU, EXTRUDER_AUTO_FAN_MENU, FAN_KICKSTART_MENU)
+      #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
         MENU_ITEM(ICON_FanSpeed, MSG_MISC_FANS, onDrawSubMenu, Draw_AdvancedFan_menu);
       #endif
       #if ENABLED(PRINTCOUNTER)

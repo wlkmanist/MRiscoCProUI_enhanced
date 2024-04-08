@@ -227,6 +227,10 @@
   #include "feature/kickstart.h"
 #endif
 
+#if ENABLED(AUTO_FAN_EDITABLE)
+  #include "feature/autofans.h"
+#endif
+
 #if ENABLED(USE_CONTROLLER_FAN)
   #include "feature/controllerfan.h"
 #endif
@@ -1313,6 +1317,10 @@ void setup() {
 
   #if ENABLED(FAN_KICKSTART_EDITABLE)
     SETUP_RUN(kickstart.setup());
+  #endif
+
+  #if ENABLED(AUTO_FAN_EDITABLE)
+    SETUP_RUN(autofans.setup());
   #endif
 
   #if ENABLED(USE_CONTROLLER_FAN)     // Set up fan controller to initialize also the default configurations.

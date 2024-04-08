@@ -145,6 +145,8 @@
 
 #include "../feature/kickstart.h"
 
+#include "../feature/autofans.h"
+
 #if ENABLED(CASE_LIGHT_ENABLE)
   #include "../feature/caselight.h"
 #endif
@@ -452,7 +454,12 @@ typedef struct SettingsDataStruct {
   //
   // Fan Kickstart settings
   //
-  kickstart_settings_t kickstart_settings;            // M711
+  kickstart_settings_t kickstart_settings;              // M711
+
+  //
+  // Auto Fans settings
+  //
+  autofans_settings_t autofans_settings;                // M712
 
   //
   // POWER_LOSS_RECOVERY
@@ -1349,6 +1356,19 @@ void MarlinSettings::postprocess() {
         constexpr kickstart_settings_t fks = kickstart_defaults;
       #endif
       EEPROM_WRITE(fks);
+    }
+
+    //
+    // Auto Fans
+    //
+    {
+      _FIELD_TEST(autofans_settings);
+      #if ENABLED(AUTO_FAN_EDITABLE)
+        const autofans_settings_t &eauto = autofans.settings;
+      #else
+        constexpr autofans_settings_t eauto = autofans_defaults;
+      #endif
+      EEPROM_WRITE(eauto);
     }
 
     //
@@ -2452,6 +2472,16 @@ void MarlinSettings::postprocess() {
         _FIELD_TEST(kickstart_settings);
         EEPROM_READ(fks);
         TERN_(FAN_KICKSTART_EDITABLE, if (!validating) kickstart.settings = fks);
+      }
+
+      //
+      // Auto Fans
+      //
+      {
+        autofans_settings_t eauto = { 0 };
+        _FIELD_TEST(autofans_settings);
+        EEPROM_READ(eauto);
+        TERN_(AUTO_FAN_EDITABLE, if (!validating) autofans.settings = eauto);
       }
 
       //
@@ -3694,6 +3724,11 @@ void MarlinSettings::reset() {
   // Fan Kickstart
   //
   TERN_(FAN_KICKSTART_EDITABLE, kickstart.reset());
+
+  //
+  // Auto Fans
+  //
+  TERN_(AUTO_FAN_EDITABLE, autofans.reset());
 
   //
   // Power-Loss Recovery

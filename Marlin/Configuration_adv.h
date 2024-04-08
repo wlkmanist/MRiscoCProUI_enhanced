@@ -711,7 +711,10 @@
 #define COOLER_AUTO_FAN_TEMPERATURE 18
 #define COOLER_AUTO_FAN_SPEED 255
 
-#define EXTRUDER_AUTO_FAN_MENU        // Enable the Extruder Fans submenu
+#define AUTO_FAN_EDITABLE             // Enable M712 configurable settings     (320 bytes of flash)
+#if ENABLED(AUTO_FAN_EDITABLE)
+  #define AUTO_FAN_MENU               // Enable the Extruder Auto Fans submenu (104 bytes of flash)
+#endif
 
 /**
  * Hotend Cooling Fans tachometers

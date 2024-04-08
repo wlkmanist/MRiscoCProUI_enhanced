@@ -1302,6 +1302,11 @@ private:
     static void M711_report(const bool forReplay=true);
   #endif
 
+  #if ENABLED(AUTO_FAN_EDITABLE)
+    static void M712();
+    static void M712_report(const bool forReplay=true);
+  #endif
+
   static void T(const int8_t tool_index) IF_DISABLED(HAS_TOOLCHANGE, { UNUSED(tool_index); });
 
 };
