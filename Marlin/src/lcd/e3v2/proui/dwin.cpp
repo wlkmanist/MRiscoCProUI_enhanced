@@ -4808,7 +4808,7 @@ void Draw_AdvancedSettings_Menu() {
 
   void Draw_Advanced_Menu() { // From Control_Menu (Control) || Default-NP AdvancedSettings_Menu (Level)
     checkkey = Menu;
-    if (SET_MENU(AdvancedMenu, MSG_ADVANCED_SETTINGS, 19)) {
+    if (SET_MENU(AdvancedMenu, MSG_ADVANCED_SETTINGS, 20)) {
       BACK_ITEM(Draw_Control_Menu);
       #if ENABLED(EEPROM_SETTINGS)
         MENU_ITEM(ICON_ReadEEPROM, MSG_LOAD_EEPROM, onDrawMenuItem, ReadEeprom);
