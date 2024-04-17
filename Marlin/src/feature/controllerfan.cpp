@@ -92,20 +92,27 @@ void ControllerFan::update() {
       #if ENABLED(FAN_KICKSTART_EDITABLE)
       if (speed > FAN_OFF_PWM && kickstart.settings.enabled) {
         if (!fan_kick_end) {
-          fan_kick_end = ms + kickstart.settings.duration_ms; // May be longer based on slow update interval for controller fn check. Sets minimum
+          fan_kick_end = ms + kickstart.settings.duration_ms;
           speed = map(kickstart.settings.speed, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
+          nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
         }
         else if (PENDING(ms, fan_kick_end))
+        {
           speed = map(kickstart.settings.speed, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
+          nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
+        }
       }
       #else
       if (speed > FAN_OFF_PWM) {
         if (!fan_kick_end) {
-          fan_kick_end = ms + FAN_KICKSTART_TIME; // May be longer based on slow update interval for controller fn check. Sets minimum
+          fan_kick_end = ms + FAN_KICKSTART_TIME;
           speed = FAN_KICKSTART_POWER;
+          nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
         }
-        else if (PENDING(ms, fan_kick_end))
+        else if (PENDING(ms, fan_kick_end)) {
           speed = FAN_KICKSTART_POWER;
+          nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
+        }
       }
       #endif
       else
