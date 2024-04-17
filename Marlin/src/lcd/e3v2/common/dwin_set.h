@@ -138,4 +138,4 @@
 #define ICON_AxisTR            251
 #define ICON_AxisBL            252
 #define ICON_AxisTL            253
-#define ICON_AxisC             ICON_Axis //254 // broken somehow
+#define ICON_AxisC             254
