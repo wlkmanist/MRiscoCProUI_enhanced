@@ -2791,9 +2791,9 @@ void ApplyMove() {
 #endif
 
 #if ENABLED(AUTO_FAN_MENU)
-  void SetExtruderFanSpeed() { SetIntOnClick(10, 120, autofans.settings.extruder_temp, []{ autofans.settings.extruder_temp = MenuData.Value; }); }
-  void SetChamberFanSpeed() { SetIntOnClick(10, 80, autofans.settings.chamber_temp, []{ autofans.settings.chamber_temp = MenuData.Value; }); }
-  void SetCoolerFanSpeed() { SetIntOnClick(10, 100, autofans.settings.cooler_temp, []{ autofans.settings.cooler_temp = MenuData.Value; }); }
+  void SetExtruderFanThreshold() { SetIntOnClick(10, 120, autofans.settings.extruder_temp, []{ autofans.settings.extruder_temp = MenuData.Value; }); }
+  void SetChamberFanThreshold() { SetIntOnClick(10, 80, autofans.settings.chamber_temp, []{ autofans.settings.chamber_temp = MenuData.Value; }); }
+  void SetCoolerFanThreshold() { SetIntOnClick(10, 100, autofans.settings.cooler_temp, []{ autofans.settings.cooler_temp = MenuData.Value; }); }
 #endif
 
 #if ENABLED(SHOW_SPEED_IND)
@@ -3786,13 +3786,13 @@ void Draw_Tune_Menu() {
 
       #if (ENABLED(AUTO_FAN_MENU))
         #if HAS_AUTO_EXTRUDER_FAN
-          EDIT_ITEM(ICON_Temperature, MSG_FAN_EXTRUDER_TEMP, onDrawPInt8Menu, SetExtruderFanSpeed, &autofans.settings.extruder_temp);
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_EXTRUDER_TEMP, onDrawPInt8Menu, SetExtruderFanThreshold, &autofans.settings.extruder_temp);
         #endif
         #if HAS_AUTO_CHAMBER_FAN
-          EDIT_ITEM(ICON_Temperature, MSG_FAN_CHAMBER_TEMP, onDrawPInt8Menu, SetChamberFanSpeed, &autofans.settings.chamber_temp);
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_CHAMBER_TEMP, onDrawPInt8Menu, SetChamberFanThreshold, &autofans.settings.chamber_temp);
         #endif
         #if HAS_AUTO_COOLER_FAN
-          EDIT_ITEM(ICON_Temperature, MSG_FAN_COOLER_TEMP, onDrawPInt8Menu, SetCoolerFanSpeed, &autofans.settings.cooler_temp);
+          EDIT_ITEM(ICON_Temperature, MSG_FAN_COOLER_TEMP, onDrawPInt8Menu, SetCoolerFanThreshold, &autofans.settings.cooler_temp);
         #endif
       #endif
     }
