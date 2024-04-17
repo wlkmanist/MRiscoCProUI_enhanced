@@ -305,7 +305,9 @@ MenuClass *PIDMenu = nullptr;
   #if ENABLED(PROUI_MESH_EDIT)
     MenuClass *EditMeshMenu = nullptr;
   #endif
-  MenuClass *MeshInsetMenu = nullptr;
+  #if PROUI_EX
+    MenuClass *MeshInsetMenu = nullptr;
+  #endif
 #endif
 #if ENABLED(SHAPING_MENU)
   MenuClass *InputShapingMenu = nullptr;
@@ -2042,6 +2044,18 @@ void DWIN_Print_Aborted() {
   }
 #endif
 
+// Max X Mesh Inset does not save after restart - it is limited by Probe offset. TODO: this is just a temp workaround,
+ #if PROUI_EX && HAS_MESH
+  void SetMeshArea() {
+    PRO_data.mesh_min_x = HMI_data.mesh_min_x;
+    PRO_data.mesh_max_x = HMI_data.mesh_max_x;
+    PRO_data.mesh_min_y = HMI_data.mesh_min_y;
+    PRO_data.mesh_max_y = HMI_data.mesh_max_y;
+    ProEx.ApplyMeshLimits();
+    ReDrawMenu();
+  }
+#endif
+
 void DWIN_SetDataDefaults() {
   DEBUG_ECHOLNPGM("DWIN_SetDataDefaults");
   DWIN_SetColorDefaults();
@@ -2102,7 +2116,13 @@ void DWIN_SetDataDefaults() {
     PRO_data.x_max_pos  = DEF_X_MAX_POS;
     PRO_data.y_max_pos  = DEF_Y_MAX_POS;
     PRO_data.z_max_pos  = DEF_Z_MAX_POS;
-    TERN_(HAS_MESH, PRO_data.grid_max_points = DEF_GRID_MAX_POINTS;)
+    #if HAS_MESH
+      PRO_data.grid_max_points = DEF_GRID_MAX_POINTS;
+      PRO_data.mesh_min_x = DEF_MESH_MIN_X;
+      PRO_data.mesh_max_x = DEF_MESH_MAX_X;
+      PRO_data.mesh_min_y = DEF_MESH_MIN_Y;
+      PRO_data.mesh_max_y = DEF_MESH_MAX_Y;
+    #endif
     #if HAS_BED_PROBE
       PRO_data.zprobefeedslow = DEF_Z_PROBE_FEEDRATE_SLOW;
       IF_DISABLED(BD_SENSOR, PRO_data.multiple_probing = MULTIPLE_PROBING;)
@@ -2124,7 +2144,9 @@ void DWIN_SetDataDefaults() {
       HMI_data.zprobeFeed = DEF_Z_PROBE_FEEDRATE_SLOW;
       IF_DISABLED(BD_SENSOR, HMI_data.multiple_probing = MULTIPLE_PROBING;)
     #endif
-    TERN_(PROUI_GRID_PNTS, HMI_data.grid_max_points = DEF_GRID_MAX_POINTS;)
+    #if ALL(HAS_MESH, PROUI_GRID_PNTS)
+      HMI_data.grid_max_points = DEF_GRID_MAX_POINTS;
+    #endif
     TERN_(HAS_EXTRUDERS, HMI_data.Invert_E0 = DEF_INVERT_E0_DIR;)
   #endif
 }
@@ -3676,29 +3698,33 @@ void Draw_Tune_Menu() {
   void Draw_TrinamicConfig_menu() {
     checkkey = Menu;
     if (SET_MENU(TrinamicConfigMenu, MSG_TMC_DRIVERS, 9)) {
-      BACK_ITEM(Draw_Advanced_Menu);
+      #if NONE(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR, MESH_BED_LEVELING)
+        BACK_ITEM(Draw_AdvancedSettings_Menu);
+      #else
+        BACK_ITEM(Draw_Advanced_Menu);
+      #endif
       #if AXIS_IS_TMC(X)
         EDIT_ITEM(ICON_TMCXSet, MSG_TMC_ACURRENT, onDrawPIntMenu, SetXTMCCurrent, &stepperX.val_mA);
         #if AXIS_HAS_STEALTHCHOP(X)
-          EDIT_ITEM_F(ICON_TMCXSet, STR_A " " STR_TMC_STEALTH, onDrawChkbMenu, SetXTMCStealth, &stepperX.stored.stealthChop_enabled);
+          EDIT_ITEM(ICON_TMCXSet, MSG_TMC_ASTEALTH, onDrawChkbMenu, SetXTMCStealth, &stepperX.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(Y)
         EDIT_ITEM(ICON_TMCYSet, MSG_TMC_BCURRENT, onDrawPIntMenu, SetYTMCCurrent, &stepperY.val_mA);
         #if AXIS_HAS_STEALTHCHOP(Y)
-          EDIT_ITEM_F(ICON_TMCYSet, STR_B " " STR_TMC_STEALTH, onDrawChkbMenu, SetYTMCStealth, &stepperY.stored.stealthChop_enabled);
+          EDIT_ITEM(ICON_TMCYSet, MSG_TMC_BSTEALTH, onDrawChkbMenu, SetYTMCStealth, &stepperY.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(Z)
         EDIT_ITEM(ICON_TMCZSet, MSG_TMC_CCURRENT, onDrawPIntMenu, SetZTMCCurrent, &stepperZ.val_mA);
         #if AXIS_HAS_STEALTHCHOP(Z)
-          EDIT_ITEM_F(ICON_TMCZSet, STR_C " " STR_TMC_STEALTH, onDrawChkbMenu, SetZTMCStealth, &stepperZ.stored.stealthChop_enabled);
+          EDIT_ITEM(ICON_TMCZSet, MSG_TMC_CSTEALTH, onDrawChkbMenu, SetZTMCStealth, &stepperZ.stored.stealthChop_enabled);
         #endif
       #endif
       #if AXIS_IS_TMC(E0)
         EDIT_ITEM(ICON_TMCESet, MSG_TMC_ECURRENT, onDrawPIntMenu, SetETMCCurrent, &stepperE0.val_mA);
         #if AXIS_HAS_STEALTHCHOP(E0)
-          EDIT_ITEM_F(ICON_TMCESet, STR_E " " STR_TMC_STEALTH, onDrawChkbMenu, SetETMCStealth, &stepperE0.stored.stealthChop_enabled);
+          EDIT_ITEM(ICON_TMCESet, MSG_TMC_ESTEALTH, onDrawChkbMenu, SetETMCStealth, &stepperE0.stored.stealthChop_enabled);
         #endif
       #endif
     }
@@ -4350,19 +4376,17 @@ void Draw_MaxAccel_Menu() {
       SetOnClick(SetIntNoDraw, GRID_MIN, GRID_LIMIT, 0, PRO_data.grid_max_points, ApplyMeshPoints, LiveMeshPoints);
       ProEx.DrawMeshPoints(true, CurrentMenu->line(), PRO_data.grid_max_points);
     }
-  #elif PROUI_GRID_PNTS
-    void ApplyMeshPoints() { HMI_data.grid_max_points = MenuData.Value; }
-    void SetMeshPoints() { SetPIntOnClick(GRID_MIN, GRID_LIMIT, ApplyMeshPoints); }
-  #endif
-    void ApplyMeshInset() { reset_bed_level(); ReDrawItem(); }
-    void SetXMeshInset()  { SetPFloatOnClick(0, X_BED_SIZE, UNITFDIGITS, ApplyMeshInset);  }
-    void SetYMeshInset()  { SetPFloatOnClick(0, Y_BED_SIZE, UNITFDIGITS, ApplyMeshInset);  }
+    void SetMeshInset()  { SetPFloatOnClick(0, _MAX(X_BED_SIZE, Y_BED_SIZE), UNITFDIGITS, SetMeshArea, ProEx.ApplyMeshLimits);  }
+    // void ApplyMeshInset() { reset_bed_level(); ReDrawItem(); }
+    // void SetXMeshInset()  { SetPFloatOnClick(0, X_BED_SIZE, UNITFDIGITS, ApplyMeshInset);  }
+    // void SetYMeshInset()  { SetPFloatOnClick(0, Y_BED_SIZE, UNITFDIGITS, ApplyMeshInset);  }
     void MaxMeshArea() {
-      MESH_MIN_X = 0;
-      MESH_MAX_X = X_BED_SIZE;
-      MESH_MIN_Y = 0;
-      MESH_MAX_Y = Y_BED_SIZE;
+      PRO_data.mesh_min_x = HMI_data.mesh_min_x = 0;
+      PRO_data.mesh_max_x = HMI_data.mesh_max_x = X_BED_SIZE;
+      PRO_data.mesh_min_y = HMI_data.mesh_min_y = 0;
+      PRO_data.mesh_max_y = HMI_data.mesh_max_y = Y_BED_SIZE;
       reset_bed_level();
+      ProEx.ApplyMeshLimits();
       ReDrawMenu();
     }
     void CenterMeshArea() {
@@ -4370,13 +4394,19 @@ void Draw_MaxAccel_Menu() {
       if (max < X_BED_SIZE - MESH_MAX_X) { max = X_BED_SIZE - MESH_MAX_X; }
       if (max < MESH_MIN_Y) { max = MESH_MIN_Y; }
       if (max < Y_BED_SIZE - MESH_MAX_Y) { max = Y_BED_SIZE - MESH_MAX_Y; }
-      MESH_MIN_X = max;
-      MESH_MAX_X = X_BED_SIZE - max;
-      MESH_MIN_Y = max;
-      MESH_MAX_Y = Y_BED_SIZE - max;
+      PRO_data.mesh_min_x = HMI_data.mesh_min_x = max;
+      PRO_data.mesh_max_x = HMI_data.mesh_max_x = X_BED_SIZE - max;
+      PRO_data.mesh_min_y = HMI_data.mesh_min_y = max;
+      PRO_data.mesh_max_y = HMI_data.mesh_max_y = Y_BED_SIZE - max;
       reset_bed_level();
+      ProEx.ApplyMeshLimits();
       ReDrawMenu();
     }
+  #elif PROUI_GRID_PNTS
+    void ApplyMeshPoints() { HMI_data.grid_max_points = MenuData.Value; }
+    void SetMeshPoints() { SetIntOnClick(GRID_MIN, GRID_LIMIT, HMI_data.grid_max_points, ApplyMeshPoints); }
+    // void SetMeshPoints() { SetPIntOnClick(GRID_MIN, GRID_LIMIT); }
+  #endif
 
   #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
     void ApplyMeshFadeHeight() { set_z_fade_height(planner.z_fade_height); }
@@ -4440,17 +4470,17 @@ void Draw_MaxAccel_Menu() {
 #if HAS_MESH
   void Draw_MeshSet_Menu() {
     checkkey = Menu;
-    if (SET_MENU(MeshMenu, MSG_MESH_LEVELING, 7)) {
+    if (SET_MENU(MeshMenu, MSG_MESH_SETTINGS, 7)) {
       BACK_ITEM(Draw_AdvancedSettings_Menu);
       #if ENABLED(ACTIVATE_MESH_ITEM)
         EDIT_ITEM(ICON_UBLActive, MSG_ACTIVATE_MESH, onDrawChkbMenu, SetMeshActive, &planner.leveling_active);
       #endif
       #if PROUI_EX
         MENU_ITEM(ICON_MeshPoints, MSG_MESH_POINTS, onDrawMeshPoints, SetMeshPoints);
+        MENU_ITEM(ICON_ProbeMargin, MSG_MESH_INSET, onDrawSubMenu, Draw_MeshInset_Menu);
       #elif PROUI_GRID_PNTS
         EDIT_ITEM(ICON_MeshPoints, MSG_MESH_POINTS, onDrawPInt8Menu, SetMeshPoints, &HMI_data.grid_max_points);
       #endif
-      MENU_ITEM(ICON_ProbeMargin, MSG_MESH_INSET, onDrawSubMenu, Draw_MeshInset_Menu);
       #if ALL(HAS_HEATED_BED, PREHEAT_BEFORE_LEVELING)
         EDIT_ITEM(ICON_Temperature, MSG_UBL_SET_TEMP_BED, onDrawPIntMenu, SetBedLevT, &HMI_data.BedLevT);
       #endif
@@ -4484,20 +4514,22 @@ void Draw_MaxAccel_Menu() {
     }
   #endif
 
-  void Draw_MeshInset_Menu() {
-    checkkey = Menu;
-    if (SET_MENU(MeshInsetMenu, MSG_MESH_INSET, 7)) {
-      BACK_ITEM(Draw_MeshSet_Menu);
-      EDIT_ITEM(ICON_Box, MSG_MESH_MIN_X, onDrawPFloatMenu, SetXMeshInset, &HMI_data.mesh_min_x);
-      EDIT_ITEM(ICON_ProbeMargin, MSG_MESH_MAX_X, onDrawPFloatMenu, SetXMeshInset, &HMI_data.mesh_max_x);
-      EDIT_ITEM(ICON_Box, MSG_MESH_MIN_Y, onDrawPFloatMenu, SetYMeshInset, &HMI_data.mesh_min_y);
-      EDIT_ITEM(ICON_ProbeMargin, MSG_MESH_MAX_Y, onDrawPFloatMenu, SetYMeshInset, &HMI_data.mesh_max_y);
-      MENU_ITEM(ICON_AxisC, MSG_MESH_AMAX, onDrawMenuItem, MaxMeshArea);
-      MENU_ITEM(ICON_SetHome, MSG_MESH_CENTER, onDrawMenuItem, CenterMeshArea);
+  #if PROUI_EX
+    void Draw_MeshInset_Menu() {
+      checkkey = Menu;
+      if (SET_MENU(MeshInsetMenu, MSG_MESH_INSET, 7)) {
+        BACK_ITEM(Draw_MeshSet_Menu);
+        EDIT_ITEM(ICON_Box, MSG_MESH_MIN_X, onDrawPFloatMenu, SetMeshInset, &HMI_data.mesh_min_x);
+        EDIT_ITEM(ICON_ProbeMargin, MSG_MESH_MAX_X, onDrawPFloatMenu, SetMeshInset, &HMI_data.mesh_max_x);
+        EDIT_ITEM(ICON_Box, MSG_MESH_MIN_Y, onDrawPFloatMenu, SetMeshInset, &HMI_data.mesh_min_y);
+        EDIT_ITEM(ICON_ProbeMargin, MSG_MESH_MAX_Y, onDrawPFloatMenu, SetMeshInset, &HMI_data.mesh_max_y);
+        MENU_ITEM(ICON_AxisC, MSG_MESH_AMAX, onDrawMenuItem, MaxMeshArea);
+        MENU_ITEM(ICON_SetHome, MSG_MESH_CENTER, onDrawMenuItem, CenterMeshArea);
+      }
+      UpdateMenu(MeshInsetMenu);
+      LCD_MESSAGE_F("..Center Area sets mesh equidistant by greatest inset from edge.");
     }
-    UpdateMenu(MeshInsetMenu);
-    LCD_MESSAGE_F("..Center Area sets mesh equidistant by greatest inset from edge.");
-  }
+  #endif
 
 #endif  // HAS_MESH
 
@@ -4646,7 +4678,7 @@ void Draw_AdvancedSettings_Menu() {
       MENU_ITEM(ICON_Tilt, MSG_UBL_TILT_MESH, onDrawMenuItem, UBLMeshTilt);
       MENU_ITEM(ICON_Probe, MSG_ZPROBE_SETTINGS, onDrawSubMenu, Draw_ProbeSet_Menu);
     #endif
-    MENU_ITEM(ICON_PrintSize, MSG_MESH_LEVELING, onDrawSubMenu, Draw_MeshSet_Menu);
+    MENU_ITEM(ICON_PrintSize, MSG_MESH_SETTINGS, onDrawSubMenu, Draw_MeshSet_Menu);
     MENU_ITEM(ICON_MeshViewer, MSG_MESH_VIEW, onDrawSubMenu, DWIN_MeshViewer);
     #if USE_GRID_MESHVIEWER
       EDIT_ITEM(ICON_PrintSize, MSG_CHANGE_MESH, onDrawChkbMenu, SetViewMesh, &bedLevelTools.view_mesh);
@@ -4676,7 +4708,7 @@ void Draw_AdvancedSettings_Menu() {
       MENU_ITEM(ICON_Level, MSG_AUTO_MESH, onDrawMenuItem, AutoLevStart);
       MENU_ITEM(ICON_Probe, MSG_ZPROBE_SETTINGS, onDrawSubMenu, Draw_ProbeSet_Menu);
     #endif
-    MENU_ITEM(ICON_PrintSize, MSG_MESH_LEVELING, onDrawSubMenu, Draw_MeshSet_Menu);
+    MENU_ITEM(ICON_PrintSize, MSG_MESH_SETTINGS, onDrawSubMenu, Draw_MeshSet_Menu);
     MENU_ITEM(ICON_MeshViewer, MSG_MESH_VIEW, onDrawSubMenu, DWIN_MeshViewer);
     #if USE_GRID_MESHVIEWER
       EDIT_ITEM(ICON_PrintSize, MSG_CHANGE_MESH, onDrawChkbMenu, SetViewMesh, &bedLevelTools.view_mesh);
@@ -4693,12 +4725,12 @@ void Draw_AdvancedSettings_Menu() {
 #elif ENABLED(MESH_BED_LEVELING)
 void Draw_AdvancedSettings_Menu() {
   checkkey = Menu;
-  if (SET_MENU(AdvancedSettings, MSG_UBL_MESH_LEVELING, 10)) {
+  if (SET_MENU(AdvancedSettings, MSG_MESH_LEVELING, 10)) {
     BACK_ITEM(Goto_Main_Menu);
     MENU_ITEM(ICON_ManualMesh, MSG_UBL_CONTINUE_MESH, onDrawMenuItem, ManualMeshStart);
     MMeshMoveZItem = EDIT_ITEM(ICON_Zoffset, MSG_MESH_EDIT_Z, onDrawPFloat2Menu, SetMMeshMoveZ, &current_position.z);
     MENU_ITEM(ICON_AxisD, MSG_LEVEL_BED_NEXT_POINT, onDrawMenuItem, ManualMeshContinue);
-    MENU_ITEM(ICON_PrintSize, MSG_MESH_LEVELING, onDrawSubMenu, Draw_MeshSet_Menu);
+    MENU_ITEM(ICON_PrintSize, MSG_MESH_SETTINGS, onDrawSubMenu, Draw_MeshSet_Menu);
     MENU_ITEM(ICON_MeshViewer, MSG_MESH_VIEW, onDrawSubMenu, DWIN_MeshViewer);
     #if USE_GRID_MESHVIEWER
       EDIT_ITEM(ICON_PrintSize, MSG_CHANGE_MESH, onDrawChkbMenu, SetViewMesh, &bedLevelTools.view_mesh);
@@ -4770,62 +4802,66 @@ void Draw_AdvancedSettings_Menu() {
 }
 #endif
 
-void Draw_Advanced_Menu() { // From Control_Menu (Control) || Default-NP AdvancedSettings_Menu (Level)
-  checkkey = Menu;
-  if (SET_MENU(AdvancedMenu, MSG_ADVANCED_SETTINGS, 20)) {
-    BACK_ITEM(Draw_Control_Menu);
-    #if ENABLED(EEPROM_SETTINGS)
-      MENU_ITEM(ICON_ReadEEPROM, MSG_LOAD_EEPROM, onDrawMenuItem, ReadEeprom);
-      MENU_ITEM(ICON_ResetEEPROM, MSG_RESTORE_DEFAULTS, onDrawMenuItem, ResetEeprom);
-    #endif
-    #if HAS_LCD_BRIGHTNESS
-      EDIT_ITEM(ICON_Brightness, MSG_BRIGHTNESS, onDrawPInt8Menu, SetBrightness, &ui.brightness);
-    #endif
-    #if ENABLED(EDITABLE_DISPLAY_TIMEOUT)
-      EDIT_ITEM(ICON_RemainTime, MSG_SCREEN_TIMEOUT, onDrawPInt8Menu, SetTimer, &ui.backlight_timeout_minutes);
-    #endif
-    #if BED_SCREW_INSET
-      EDIT_ITEM(ICON_ProbeMargin, MSG_SCREW_INSET, onDrawPFloatMenu, SetRetractSpeed, &ui.screw_pos);
-    #endif
-    #if ALL(PROUI_ITEM_PLR, POWER_LOSS_RECOVERY)
-      EDIT_ITEM(ICON_Pwrlossr, MSG_OUTAGE_RECOVERY, onDrawChkbMenu, SetPwrLossr, &recovery.enabled);
-    #endif
-    #if ENABLED(SHOW_SPEED_IND)
-      EDIT_ITEM(ICON_MaxSpeed, MSG_SPEED_IND, onDrawChkbMenu, SetSpdInd, &HMI_data.SpdInd);
-    #endif
-    #if ENABLED(SOUND_MENU_ITEM)
-      EDIT_ITEM(ICON_Sound, MSG_TICK, onDrawChkbMenu, SetEnableTick, &ui.tick_on);
-      EDIT_ITEM(ICON_Sound, MSG_SOUND, onDrawChkbMenu, SetEnableSound, &ui.sound_on);
-    #endif
-    #if HAS_GCODE_PREVIEW
-      EDIT_ITEM(ICON_File, MSG_HAS_PREVIEW, onDrawChkbMenu, SetPreview, &HMI_data.EnablePreview);
-    #endif
-    #if ENABLED(BAUD_RATE_GCODE)
-      EDIT_ITEM(ICON_SetBaudRate, MSG_250K_BAUD, onDrawChkbMenu, SetBaudRate, &HMI_data.Baud250K);
-    #endif
-    #if ENABLED(PROUI_MEDIASORT)
-      EDIT_ITEM(ICON_File, MSG_MEDIA_SORT, onDrawChkbMenu, SetMediaSort, &HMI_data.MediaSort);
-    #endif
-    EDIT_ITEM(ICON_File, MSG_MEDIA_UPDATE, onDrawChkbMenu, SetMediaAutoMount, &HMI_data.MediaAutoMount);
-    #if HAS_TRINAMIC_CONFIG
-      MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
-    #endif
-    #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
-      MENU_ITEM(ICON_FanSpeed, MSG_FANS_SETTINGS, onDrawSubMenu, Draw_AdvancedFan_menu);
-    #endif
-    #if ENABLED(PRINTCOUNTER)
-      MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
-    #endif
-    #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
-      EDIT_ITEM_F(ICON_Motion, "Enc steps/sec 100x", onDrawPIntMenu, SetEncRateA, &ui.enc_rateA);
-      EDIT_ITEM_F(ICON_Motion, "Enc steps/sec 10x", onDrawPIntMenu, SetEncRateB, &ui.enc_rateB);
-    #endif
-    #if ENABLED(PROUI_ITEM_ENC)
-      EDIT_ITEM_F(ICON_Motion, "Reverse Encoder", onDrawChkbMenu, SetRevRate, &ui.rev_rate);
-    #endif
+#if HAS_BED_PROBE || defined(MESH_BED_LEVELING)
+
+  void Draw_Advanced_Menu() { // From Control_Menu (Control) || Default-NP AdvancedSettings_Menu (Level)
+    checkkey = Menu;
+    if (SET_MENU(AdvancedMenu, MSG_ADVANCED_SETTINGS, 19)) {
+      BACK_ITEM(Draw_Control_Menu);
+      #if ENABLED(EEPROM_SETTINGS)
+        MENU_ITEM(ICON_ReadEEPROM, MSG_LOAD_EEPROM, onDrawMenuItem, ReadEeprom);
+        MENU_ITEM(ICON_ResetEEPROM, MSG_RESTORE_DEFAULTS, onDrawMenuItem, ResetEeprom);
+      #endif
+      #if HAS_LCD_BRIGHTNESS
+        EDIT_ITEM(ICON_Brightness, MSG_BRIGHTNESS, onDrawPInt8Menu, SetBrightness, &ui.brightness);
+      #endif
+      #if ENABLED(EDITABLE_DISPLAY_TIMEOUT)
+        EDIT_ITEM(ICON_RemainTime, MSG_SCREEN_TIMEOUT, onDrawPInt8Menu, SetTimer, &ui.backlight_timeout_minutes);
+      #endif
+      #if BED_SCREW_INSET
+        EDIT_ITEM(ICON_ProbeMargin, MSG_SCREW_INSET, onDrawPFloatMenu, SetRetractSpeed, &ui.screw_pos);
+      #endif
+      #if ALL(PROUI_ITEM_PLR, POWER_LOSS_RECOVERY)
+        EDIT_ITEM(ICON_Pwrlossr, MSG_OUTAGE_RECOVERY, onDrawChkbMenu, SetPwrLossr, &recovery.enabled);
+      #endif
+      #if ENABLED(SHOW_SPEED_IND)
+        EDIT_ITEM(ICON_MaxSpeed, MSG_SPEED_IND, onDrawChkbMenu, SetSpdInd, &HMI_data.SpdInd);
+      #endif
+      #if ENABLED(SOUND_MENU_ITEM)
+        EDIT_ITEM(ICON_Sound, MSG_TICK, onDrawChkbMenu, SetEnableTick, &ui.tick_on);
+        EDIT_ITEM(ICON_Sound, MSG_SOUND, onDrawChkbMenu, SetEnableSound, &ui.sound_on);
+      #endif
+      #if HAS_GCODE_PREVIEW
+        EDIT_ITEM(ICON_File, MSG_HAS_PREVIEW, onDrawChkbMenu, SetPreview, &HMI_data.EnablePreview);
+      #endif
+      #if ENABLED(BAUD_RATE_GCODE)
+        EDIT_ITEM(ICON_SetBaudRate, MSG_250K_BAUD, onDrawChkbMenu, SetBaudRate, &HMI_data.Baud250K);
+      #endif
+      #if ENABLED(PROUI_MEDIASORT)
+        EDIT_ITEM(ICON_File, MSG_MEDIA_SORT, onDrawChkbMenu, SetMediaSort, &HMI_data.MediaSort);
+      #endif
+      EDIT_ITEM(ICON_File, MSG_MEDIA_UPDATE, onDrawChkbMenu, SetMediaAutoMount, &HMI_data.MediaAutoMount);
+      #if HAS_TRINAMIC_CONFIG
+        MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
+      #endif
+      #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
+        MENU_ITEM(ICON_FanSpeed, MSG_FANS_SETTINGS, onDrawSubMenu, Draw_AdvancedFan_menu);
+      #endif
+      #if ENABLED(PRINTCOUNTER)
+        MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
+      #endif
+      #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
+        EDIT_ITEM_F(ICON_Motion, "Enc steps/sec 100x", onDrawPIntMenu, SetEncRateA, &ui.enc_rateA);
+        EDIT_ITEM_F(ICON_Motion, "Enc steps/sec 10x", onDrawPIntMenu, SetEncRateB, &ui.enc_rateB);
+      #endif
+      #if ENABLED(PROUI_ITEM_ENC)
+        EDIT_ITEM_F(ICON_Motion, "Reverse Encoder", onDrawChkbMenu, SetRevRate, &ui.rev_rate);
+      #endif
+    }
+    ui.reset_status(true);
+    UpdateMenu(AdvancedMenu);
   }
-  ui.reset_status(true);
-  UpdateMenu(AdvancedMenu);
-}
+
+#endif
 
 #endif // DWIN_LCD_PROUI

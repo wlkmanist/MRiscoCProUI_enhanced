@@ -249,7 +249,6 @@ namespace LanguageNarrow_en {
   LSTR MSG_G26_CANCELED                   = _UxGT("G26 Canceled");
   LSTR MSG_G26_LEAVING                    = _UxGT("Leaving G26");
   LSTR MSG_UBL_CONTINUE_MESH              = _UxGT("Continue Bed Mesh");
-  LSTR MSG_UBL_MESH_LEVELING              = _UxGT("Mesh Leveling");
   LSTR MSG_UBL_3POINT_MESH_LEVELING       = _UxGT("3-Point Leveling");
   LSTR MSG_UBL_GRID_MESH_LEVELING         = _UxGT("Grid Mesh Leveling");
   LSTR MSG_UBL_MESH_LEVEL                 = _UxGT("Level Mesh");
@@ -691,9 +690,10 @@ namespace LanguageNarrow_en {
   LSTR MSG_LINEAR_LEVELING                = _UxGT("Linear Leveling");
   LSTR MSG_BILINEAR_LEVELING              = _UxGT("Bilinear Leveling");
   LSTR MSG_UBL_LEVELING                   = _UxGT("Unified Bed Leveling");
-  LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Settings");
+  LSTR MSG_MESH_LEVELING                  = _UxGT("Mesh Leveling");
   LSTR MSG_MESH_DONE                      = _UxGT("Mesh probing done");
   LSTR MSG_MESH_POINTS                    = _UxGT("Mesh Points");
+  LSTR MSG_MESH_SETTINGS                  = _UxGT("Mesh Settings");
   LSTR MSG_INFO_STATS_MENU                = _UxGT("Printer Stats");
   LSTR MSG_RESET_STATS                    = _UxGT("Reset Print Stats?");
   LSTR MSG_INFO_BOARD_MENU                = _UxGT("Board Info");
@@ -866,7 +866,8 @@ namespace LanguageNarrow_en {
   LSTR MSG_TMC_ACURRENT                   = STR_A _UxGT("Driver Current");
   LSTR MSG_TMC_BCURRENT                   = STR_B _UxGT("Driver Current");
   LSTR MSG_TMC_CCURRENT                   = STR_C _UxGT("Driver Current");
-  LSTR MSG_TMC_ECURRENT                   = _UxGT("E Driver Current");
+  LSTR MSG_TMC_ECURRENT                   = STR_E _UxGT("Driver Current");
+  LSTR MSG_TMC_ENCURRENT                  = _UxGT("* Driver Current");
   LSTR MSG_TMC_HYBRID_THRS                = _UxGT("Hybrid Threshold");
   LSTR MSG_TMC_HOMING_THRS                = _UxGT("Sensorless Homing");
   LSTR MSG_TMC_STEPPING_MODE              = _UxGT("Stepping Mode");
@@ -1047,6 +1048,11 @@ namespace LanguageWide_en {
     LSTR MSG_OPTION_DISABLED                = _UxGT("Option Disabled");
     LSTR MSG_DISABLE_MANUAL_TRAMMING        = _UxGT("Disable manual tramming");
     LSTR MSG_TRAMMING_WIZARD_START          = _UxGT("Tramming Wizard Start");
+    LSTR MSG_TMC_ASTEALTH                   = _UxGT(STR_A " " STR_TMC_STEALTH);
+    LSTR MSG_TMC_BSTEALTH                   = _UxGT(STR_B " " STR_TMC_STEALTH);
+    LSTR MSG_TMC_CSTEALTH                   = _UxGT(STR_C " " STR_TMC_STEALTH);
+    LSTR MSG_TMC_ESTEALTH                   = _UxGT(STR_E " " STR_TMC_STEALTH);
+    LSTR MSG_TMC_ENSTEALTH                  = _UxGT(* " " STR_TMC_STEALTH);
   #endif // LCD_WIDTH >= 20 || HAS_DWIN_E3V2
 }
 

@@ -609,13 +609,6 @@ typedef struct SettingsDataStruct {
   #endif
 
   //
-  // Toggle the meshviwer
-  //
-  #if ALL(DWIN_LCD_PROUI, HAS_MESH, USE_GRID_MESHVIEWER)
-    bool view_mesh;
-  #endif
-
-  //
   // Bed corner screw position
   //
   #ifdef BED_SCREW_INSET
@@ -631,6 +624,13 @@ typedef struct SettingsDataStruct {
   #endif
   #if ENABLED(PROUI_ITEM_ENC)
     bool rev_rate;
+  #endif
+
+  //
+  // Toggle the meshviwer
+  //
+  #if ALL(DWIN_LCD_PROUI, HAS_MESH, USE_GRID_MESHVIEWER)
+    bool view_mesh;
   #endif
 
   //
@@ -994,7 +994,7 @@ void MarlinSettings::postprocess() {
       #if ENABLED(MESH_BED_LEVELING)
         #if ANY(PROUI_EX, PROUI_GRID_PNTS)
           static_assert(
-            sizeof(bedlevel.z_values) == GRID_LIMIT * GRID_LIMIT * sizeof(bedlevel.z_values[0][0]),
+            sizeof(bedlevel.z_values) == (GRID_LIMIT * GRID_LIMIT) * sizeof(bedlevel.z_values[0][0]),
             "MBL Z array is the wrong size."
           );
         #else
@@ -1063,7 +1063,7 @@ void MarlinSettings::postprocess() {
       #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
         #if ANY(PROUI_EX, PROUI_GRID_PNTS)
           static_assert(
-            sizeof(bedlevel.z_values) == GRID_LIMIT * GRID_LIMIT * sizeof(bedlevel.z_values[0][0]),
+            sizeof(bedlevel.z_values) == (GRID_LIMIT * GRID_LIMIT) * sizeof(bedlevel.z_values[0][0]),
             "Bilinear Z array is the wrong size."
           );
         #else
@@ -1730,24 +1730,6 @@ void MarlinSettings::postprocess() {
     #endif
 
     //
-    // BED_SCREW_INSET
-    //
-    #ifdef BED_SCREW_INSET
-      EEPROM_WRITE(ui.screw_pos);
-    #endif
-
-    //
-    // Encoder Rate
-    //
-    #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
-      EEPROM_WRITE(ui.enc_rateA);
-      EEPROM_WRITE(ui.enc_rateB);
-    #endif
-    #if ENABLED(PROUI_ITEM_ENC)
-      EEPROM_WRITE(ui.rev_rate);
-    #endif
-
-    //
     // Case Light Brightness
     //
     #if CASELIGHT_USES_BRIGHTNESS
@@ -1794,6 +1776,24 @@ void MarlinSettings::postprocess() {
     #if ENABLED(SOUND_MENU_ITEM)
       EEPROM_WRITE(ui.sound_on);
       EEPROM_WRITE(ui.tick_on);
+    #endif
+
+    //
+    // BED_SCREW_INSET
+    //
+    #ifdef BED_SCREW_INSET
+      EEPROM_WRITE(ui.screw_pos);
+    #endif
+
+    //
+    // Encoder Rate
+    //
+    #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
+      EEPROM_WRITE(ui.enc_rateA);
+      EEPROM_WRITE(ui.enc_rateB);
+    #endif
+    #if ENABLED(PROUI_ITEM_ENC)
+      EEPROM_WRITE(ui.rev_rate);
     #endif
 
     //
@@ -2865,35 +2865,12 @@ void MarlinSettings::postprocess() {
       // DWIN ProUI User Data
       //
       #if ENABLED(DWIN_LCD_PROUI)
-      {
-        const char dwin_data[eeprom_data_size] = { 0 };
-        _FIELD_TEST(dwin_data);
-        EEPROM_READ(dwin_data);
-        if (!validating) DWIN_CopySettingsFrom(dwin_data);
-      }
-
-        //
-        // BED_SCREW_INSET
-        //
-        #ifdef BED_SCREW_INSET
-          _FIELD_TEST(ui_screw_pos);
-          EEPROM_READ(ui.screw_pos);
-        #endif
-
-        //
-        // Encoder Rate
-        //
-        #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
-          _FIELD_TEST(enc_rateA);
-          EEPROM_READ(ui.enc_rateA);
-          _FIELD_TEST(enc_rateB);
-          EEPROM_READ(ui.enc_rateB);
-        #endif
-        #if ENABLED(PROUI_ITEM_ENC)
-          _FIELD_TEST(rev_rate);
-          EEPROM_READ(ui.rev_rate);
-        #endif
-
+        {
+          const char dwin_data[eeprom_data_size] = { 0 };
+          _FIELD_TEST(dwin_data);
+          EEPROM_READ(dwin_data);
+          if (!validating) DWIN_CopySettingsFrom(dwin_data);
+        }
       #endif // DWIN_LCD_PROUI
 
       //
@@ -2942,6 +2919,28 @@ void MarlinSettings::postprocess() {
         EEPROM_READ(ui.sound_on);
         _FIELD_TEST(tick_on);
         EEPROM_READ(ui.tick_on);
+      #endif
+
+      //
+      // BED_SCREW_INSET
+      //
+      #ifdef BED_SCREW_INSET
+        _FIELD_TEST(ui_screw_pos);
+        EEPROM_READ(ui.screw_pos);
+      #endif
+
+      //
+      // Encoder Rate
+      //
+      #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
+        _FIELD_TEST(enc_rateA);
+        EEPROM_READ(ui.enc_rateA);
+        _FIELD_TEST(enc_rateB);
+        EEPROM_READ(ui.enc_rateB);
+      #endif
+      #if ENABLED(PROUI_ITEM_ENC)
+        _FIELD_TEST(rev_rate);
+        EEPROM_READ(ui.rev_rate);
       #endif
 
       //
@@ -3424,24 +3423,6 @@ void MarlinSettings::reset() {
   #endif
 
   //
-  // BED_SCREW_INSET
-  //
-  #ifdef BED_SCREW_INSET
-    ui.screw_pos = BED_SCREW_INSET;
-  #endif
-
-  //
-  // Encoder Rate
-  //
-  #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
-    ui.enc_rateA = 135;
-    ui.enc_rateB = 25;
-  #endif
-  #if ENABLED(PROUI_ITEM_ENC)
-    ui.rev_rate = false;
-  #endif
-
-  //
   // Case Light Brightness
   //
   TERN_(CASELIGHT_USES_BRIGHTNESS, caselight.brightness = CASE_LIGHT_DEFAULT_BRIGHTNESS);
@@ -3457,6 +3438,24 @@ void MarlinSettings::reset() {
   #if ENABLED(SOUND_MENU_ITEM)
     ui.sound_on = ENABLED(SOUND_ON_DEFAULT);
     ui.tick_on = ENABLED(TICK_ON_DEFAULT); //added encoder beep bool
+  #endif
+
+  //
+  // BED_SCREW_INSET
+  //
+  #ifdef BED_SCREW_INSET
+    ui.screw_pos = BED_SCREW_INSET;
+  #endif
+
+  //
+  // Encoder Rate
+  //
+  #if ALL(ENCODER_RATE_MULTIPLIER, ENC_MENU_ITEM)
+    ui.enc_rateA = 135;
+    ui.enc_rateB = 25;
+  #endif
+  #if ENABLED(PROUI_ITEM_ENC)
+    ui.rev_rate = false;
   #endif
 
   //
