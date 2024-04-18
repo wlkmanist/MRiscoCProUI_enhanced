@@ -4130,6 +4130,16 @@ void MarlinSettings::reset() {
     TERN_(CONTROLLER_FAN_EDITABLE, gcode.M710_report(forReplay));
 
     //
+    // Fan Kickstart
+    //
+    TERN_(FAN_KICKSTART_EDITABLE, gcode.M711_report(forReplay));
+
+    //
+    // Auto Fans
+    //
+    TERN_(AUTO_FAN_EDITABLE, gcode.M712_report(forReplay));
+
+    //
     // Power-Loss Recovery
     //
     TERN_(POWER_LOSS_RECOVERY, gcode.M413_report(forReplay));
