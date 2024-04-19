@@ -2195,7 +2195,7 @@ void Init(){
   DWINUI::Draw_CenteredString(2, Color_Cyan, 230, TERN(PROUI_EX, F("MRiscoC ProUI EX"), F("MRiscoC ProUI")));
   DWINUI::Draw_CenteredString((fontid_t)2, Color_White, 260, F(ver));
   DWINUI::Draw_CenteredString(false, 1, Color_White, DWINUI::backcolor, 280, DateTime);
-  DWINUI::Draw_CenteredString(2, 0xffe0, 305, F("ClassicRocker883"));
+  DWINUI::Draw_CenteredString(2, 0xffe0, 305, F("wlkmanist"));
   DWIN_UpdateLCD();
   safe_delay(300);
 }

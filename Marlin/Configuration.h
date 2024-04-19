@@ -24,6 +24,9 @@
 // Edited by classicrocker883 for ProUI
 // https://github.com/classicrocker883/MriscocProUI
 
+// And edited later by wlkmanist
+// https://github.com/wlkmanist/MRiscoCProUI_enhanced
+
 // Created from Mriscoc's Professional Firmware
 // https://github.com/mriscoc/Ender3V2S1
 
@@ -132,7 +135,7 @@
 //#define BLUETOOTH
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "Aquila"
+#define CUSTOM_MACHINE_NAME "project.black Aquila"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4

@@ -24,6 +24,9 @@
 // Edited by classicrocker883 for ProUI
 // https://github.com/classicrocker883/MriscocProUI
 
+// And edited later by wlkmanist
+// https://github.com/wlkmanist/MRiscoCProUI_enhanced
+
 // Created by configs generator for Professional firmware
 // https://github.com/mriscoc/Ender3V2S1
 
