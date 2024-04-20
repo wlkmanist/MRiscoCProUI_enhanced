@@ -3742,7 +3742,11 @@ void Draw_Tune_Menu() {
   void Draw_AdvancedFan_menu() {
     checkkey = Menu;
     if (SET_MENU(AdvancedFanMenu, MSG_FANS_SETTINGS, 6)) {
-      BACK_ITEM(Draw_Advanced_Menu);
+      #if NONE(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR, MESH_BED_LEVELING)
+        BACK_ITEM(Draw_AdvancedSettings_Menu);
+      #else
+        BACK_ITEM(Draw_Advanced_Menu);
+      #endif
 
       #if ENABLED(FAN_KICKSTART_MENU)
         MENU_ITEM(ICON_Motion, MSG_FAN_KICKSTART, onDrawSubMenu, Draw_Kickstart_menu);
@@ -4731,6 +4735,9 @@ void Draw_AdvancedSettings_Menu() {
     EDIT_ITEM(ICON_File, MSG_MEDIA_UPDATE, onDrawChkbMenu, SetMediaAutoMount, &HMI_data.MediaAutoMount);
     #if HAS_TRINAMIC_CONFIG
       MENU_ITEM(ICON_TMCSet, MSG_TMC_DRIVERS, onDrawSubMenu, Draw_TrinamicConfig_menu);
+    #endif
+    #if ANY(CONTROLLER_FAN_MENU, AUTO_FAN_MENU, FAN_KICKSTART_MENU)
+      MENU_ITEM(ICON_FanSpeed, MSG_FANS_SETTINGS, onDrawSubMenu, Draw_AdvancedFan_menu);
     #endif
     #if ENABLED(PRINTCOUNTER)
       MENU_ITEM(ICON_PrintStatsReset, MSG_INFO_PRINT_COUNT_RESET, onDrawSubMenu, printStatsReset);
