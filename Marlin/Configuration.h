@@ -158,9 +158,12 @@
  *          TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#define X_DRIVER_TYPE TMC2208_STANDALONE  // Ender Configs
-#define Y_DRIVER_TYPE TMC2208_STANDALONE  // Ender Configs
-#define Z_DRIVER_TYPE TMC2208_STANDALONE  // Ender Configs
+#define TMC_UART_PIN_X PC15       // HW mod
+#define X_DRIVER_TYPE TMC2208     // HW mod
+#define TMC_UART_PIN_Y PC14       // HW mod
+#define Y_DRIVER_TYPE TMC2208     // HW mod
+#define TMC_UART_PIN_Z PC13       // HW mod
+#define Z_DRIVER_TYPE TMC2208     // HW mod
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
 //#define Z2_DRIVER_TYPE A4988
@@ -172,7 +175,7 @@
 //#define U_DRIVER_TYPE  A4988
 //#define V_DRIVER_TYPE  A4988
 //#define W_DRIVER_TYPE  A4988
-#define TMC_UART_PIN_E PA13       // HW mod for E0 driver (R8 jumper to DIO pin)
+#define TMC_UART_PIN_E PC1        // HW mod
 #define E0_DRIVER_TYPE TMC2208    // HW mod
 //#define E1_DRIVER_TYPE A4988
 //#define E2_DRIVER_TYPE A4988
@@ -3466,7 +3469,7 @@
   //#define CV_LASER_MODULE
   #define HAS_GCODE_PREVIEW 1
   #define DISABLE_TUNING_GRAPH 0// Temp plot graph - PID/MPC Tuning (1624 bytes of flash)
-  #define HAS_ESDIAG 1          // View End-stop switch continuity (560 bytes of flash)
+  //#define HAS_ESDIAG 1        // View End-stop switch continuity (560 bytes of flash)
   #define HAS_CGCODE 1          // Extra Gcode options (3320 bytes of flash)
   //#define HAS_LOCKSCREEN 1    // Simple lockscreen as to not accidentally change something (568 bytes of flash)
   #define USE_GRID_MESHVIEWER 1 // Enable two mesh graph types : one (1560 bytes of flash)
@@ -3487,8 +3490,8 @@
   #define PROUI_ITEM_TRAM       // Menu item: enable Tramming Wizard (2304 bytes of flash)
   #define PROUI_MEDIASORT       // Menu item: enable/disable file list sorting (104 bytes of flash)
   #define PROUI_ITEM_ENC        // Menu item: enable to reverse encoder direction (144 bytes of flash)
-  #define ENC_MENU_ITEM         // Menu item: faster/slower encoder rate (272 bytes of flash)
-  #define SHOW_SPEED_IND        // Menu item: blink speed in mm/s along with speed percentage (296 bytes of flash)
+  //#define ENC_MENU_ITEM       // Menu item: faster/slower encoder rate (272 bytes of flash)
+  //#define SHOW_SPEED_IND      // Menu item: blink speed in mm/s along with speed percentage (296 bytes of flash)
   //#define NO_BLINK_IND        // Disables dashboard icon blink indicator highlighted background
 
 #endif
