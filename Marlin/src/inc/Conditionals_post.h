@@ -2572,11 +2572,11 @@
   #define AUTO_EXTRUDER_FAN_COUNT 0
 #endif
 
-#if AUTO_EXTRUDER_FAN_COUNT > 0
+#if AUTO_EXTRUDER_FAN_COUNT
   #define HAS_AUTO_EXTRUDER_FAN 1
 #endif
 
-#if ANY(HAS_AUTO_FAN_0, HAS_AUTO_FAN_1, HAS_AUTO_FAN_2, HAS_AUTO_FAN_3, HAS_AUTO_FAN_4, HAS_AUTO_FAN_5, HAS_AUTO_FAN_6, HAS_AUTO_FAN_7, HAS_AUTO_CHAMBER_FAN, HAS_AUTO_COOLER_FAN)
+#if ANY(HAS_AUTO_EXTRUDER_FAN, HAS_AUTO_CHAMBER_FAN, HAS_AUTO_COOLER_FAN)
   #define HAS_AUTO_FAN 1
   #define _FANOVERLAP(I,T) (T##_AUTO_FAN_PIN == E##I##_AUTO_FAN_PIN)
   #if HAS_AUTO_CHAMBER_FAN
@@ -2592,6 +2592,15 @@
       #define AUTO_COOLER_IS_E 1
     #endif
     #undef _COFANOVERLAP
+  #endif
+#endif
+
+#if !HAS_AUTO_FAN
+  #ifdef AUTO_FAN_MENU
+    #undef AUTO_FAN_MENU
+  #endif
+  #ifdef AUTO_FAN_EDITABLE
+    #undef AUTO_FAN_EDITABLE
   #endif
 #endif
 
@@ -2659,6 +2668,13 @@
     #endif
   #else
     #undef CONTROLLER_FAN_TRIGGER_TEMP
+  #endif
+#else
+  #ifdef CONTROLLER_FAN_MENU
+    #undef CONTROLLER_FAN_MENU
+  #endif
+  #ifdef CONTROLLER_FAN_EDITABLE
+    #undef CONTROLLER_FAN_EDITABLE
   #endif
 #endif
 
@@ -2789,6 +2805,10 @@
 #endif
 
 // Fan Kickstart
+#if FAN_KICKSTART_TIME && NONE(HAS_FAN, USE_CONTROLLER_FAN)
+  #undef FAN_KICKSTART_TIME
+#endif
+
 #if FAN_KICKSTART_TIME && !defined(FAN_KICKSTART_POWER)
   #define FAN_KICKSTART_POWER 180
 #endif
