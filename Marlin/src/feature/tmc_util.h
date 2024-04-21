@@ -128,7 +128,7 @@ class TMCMarlin : public TMC, public TMCStorage<AXIS_LETTER, DRIVER_ID> {
       }
       void set_pwm_thrs(const uint32_t thrs) {
         TMC::TPWMTHRS(_tmc_thrs(this->microsteps(), thrs, planner.settings.axis_steps_per_mm[AXIS_ID]));
-        TERN_(HAS_MARLINUI_MENU, this->stored.hybrid_thrs = thrs);
+        this->stored.hybrid_thrs = thrs;
       }
     #endif
 
@@ -201,7 +201,7 @@ class TMCMarlin<TMC2208Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC220
       }
       void set_pwm_thrs(const uint32_t thrs) {
         TMC2208Stepper::TPWMTHRS(_tmc_thrs(this->microsteps(), thrs, planner.settings.axis_steps_per_mm[AXIS_ID]));
-        TERN_(HAS_MARLINUI_MENU, this->stored.hybrid_thrs = thrs);
+        this->stored.hybrid_thrs = thrs;
       }
     #endif
 
@@ -253,7 +253,7 @@ class TMCMarlin<TMC2209Stepper, AXIS_LETTER, DRIVER_ID, AXIS_ID> : public TMC220
       }
       void set_pwm_thrs(const uint32_t thrs) {
         TMC2209Stepper::TPWMTHRS(_tmc_thrs(this->microsteps(), thrs, planner.settings.axis_steps_per_mm[AXIS_ID]));
-        TERN_(HAS_MARLINUI_MENU, this->stored.hybrid_thrs = thrs);
+        this->stored.hybrid_thrs = thrs;
       }
     #endif
     #if USE_SENSORLESS
