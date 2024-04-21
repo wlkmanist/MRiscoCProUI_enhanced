@@ -77,8 +77,9 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_VOXELAB_AQUILA // BOARD_CREALITY_V427 BOARD_VOXELAB_AQUILA BOARD_CREALITY_V422
+  #define MOTHERBOARD BOARD_PROJECTBLACK_AQUILA // BOARD_CREALITY_V427 BOARD_VOXELAB_AQUILA BOARD_CREALITY_V422
 #endif
+#define NO_CUSTOM_BOARD_WARNING
 
 /**
  * Select the serial port on the board to use for communication with the host.
@@ -158,12 +159,9 @@
  *          TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#define TMC_UART_PIN_X PC15       // HW mod
-#define X_DRIVER_TYPE TMC2208     // HW mod
-#define TMC_UART_PIN_Y PC14       // HW mod
-#define Y_DRIVER_TYPE TMC2208     // HW mod
-#define TMC_UART_PIN_Z PC13       // HW mod
-#define Z_DRIVER_TYPE TMC2208     // HW mod
+#define X_DRIVER_TYPE    TMC2208     // HW mod
+#define Y_DRIVER_TYPE    TMC2208     // HW mod
+#define Z_DRIVER_TYPE    TMC2208     // HW mod
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
 //#define Z2_DRIVER_TYPE A4988
@@ -175,8 +173,7 @@
 //#define U_DRIVER_TYPE  A4988
 //#define V_DRIVER_TYPE  A4988
 //#define W_DRIVER_TYPE  A4988
-#define TMC_UART_PIN_E PC1        // HW mod
-#define E0_DRIVER_TYPE TMC2208    // HW mod
+#define E0_DRIVER_TYPE   TMC2208    // HW mod
 //#define E1_DRIVER_TYPE A4988
 //#define E2_DRIVER_TYPE A4988
 //#define E3_DRIVER_TYPE A4988

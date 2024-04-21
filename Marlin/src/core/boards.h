@@ -521,6 +521,8 @@
 // Custom board
 //
 
+#define BOARD_PROJECTBLACK_AQUILA     9000  // Modified Voxelab Aquila V1.0.1 board (GD32F103RC / STM32F103RE)
+
 #define BOARD_CUSTOM                  9998  // Custom pins definition for development and/or rare boards
 
 //

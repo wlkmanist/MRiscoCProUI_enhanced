@@ -906,6 +906,9 @@
 #elif MB(CUSTOM)
   #include "pins_custom.h"                          //                                      env:custom
 
+#elif MB(PROJECTBLACK_AQUILA)
+  #include "gd32f1/pins_PROJECTBLACK_AQUILA.h"           // GD32F1, STM32F1                      env:GD32F103RC_voxelab_maple env:STM32F103RE_creality_maple env:STM32F103RE_creality
+
 //
 // Linux Native Debug board
 //

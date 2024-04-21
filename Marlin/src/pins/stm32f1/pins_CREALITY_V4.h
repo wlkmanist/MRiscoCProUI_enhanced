@@ -160,13 +160,6 @@
   #define FAN0_PIN                          PA0   // FAN
 #endif
 
-#ifndef E0_AUTO_FAN_PIN
-  #define E0_AUTO_FAN_PIN                   PB0   // to BLTouch pin 3
-#endif
-#ifndef CONTROLLER_FAN_PIN
-  #define CONTROLLER_FAN_PIN                PB1   // to BLTouch pin 1
-#endif
-
 #define FAN_SOFT_PWM_REQUIRED
 
 //
@@ -375,6 +368,8 @@
     #define Z_SERIAL_RX_PIN TMC_UART_PIN_Z
   #endif
 
-  #define TMC_BAUD_RATE 19600
+  #ifndef TMC_BAUD_RATE
+    #define TMC_BAUD_RATE 19600
+  #endif
 
 #endif
