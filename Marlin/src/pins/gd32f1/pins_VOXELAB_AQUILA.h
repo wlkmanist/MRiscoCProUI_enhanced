@@ -27,11 +27,22 @@
  * Uses CREALITY V4 (STM32F103RE / STM32F103RC) board pin assignments
  */
 
-#define BOARD_INFO_NAME        "Aquila v1.0.1"
+#ifndef BOARD_INFO_NAME
+  #define BOARD_INFO_NAME      "Aquila v1.0.1"
+#endif
 #ifndef DEFAULT_MACHINE_NAME
   #define DEFAULT_MACHINE_NAME "Aquila"
 #endif
 
-#define NO_MAPLE_WARNING     // Disable warning when compiling with Maple env
+#define NO_MAPLE_WARNING              // Disable warning when compiling with Maple env
+
+//
+// Power Loss Detection
+//
+//#ifndef POWER_LOSS_PIN
+//  #define POWER_LOSS_PIN      PA15  // PWRDET
+//#endif
+
+//#define LED                   PA3
 
 #include "../stm32f1/pins_CREALITY_V4.h"
