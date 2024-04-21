@@ -45,4 +45,43 @@
 
 //#define LED                   PA3
 
+/**    Debug port
+ *       -----
+ *       | 1 | VCC
+ *       | 2 | PA13
+ *       | 3 | PA14
+ *       | 4 | GND
+ *       -----
+ */
+
+/**
+ * RET6 12864 LCD (Board)
+ *        ------
+ *  PC6  | 1  2 | PB2
+ *  PB10 | 3  4 | PB11
+ *  PB14   5  6 | PB13
+ *  PB12 | 7  8 | PB15
+ *   GND | 9 10 | +5V
+ *        ------
+ * 
+ *   DWIN LCD Display
+ *        ------
+ *    NC | 1  2 | NC
+ *     B | 3  4 | A
+ *    EN   5  6 | BEEP
+ *    RX | 7  8 | TX
+ *   GND | 9 10 | VCC (+5V)
+ *        ------
+ */
+
+/**     BL Touch
+ *       -----
+ *       | 1 | PB1
+ *         2 | GND
+ *       | 3 | PB0
+ *         4 | +5V
+ *       | 5 | GND
+ *       -----
+ */
+
 #include "../stm32f1/pins_CREALITY_V4.h"
