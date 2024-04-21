@@ -3618,7 +3618,7 @@ void Draw_Tune_Menu() {
 
   void Draw_TrinamicConfig_menu() {
     checkkey = Menu;
-    if (SET_MENU(TrinamicConfigMenu, MSG_TMC_DRIVERS, 9 + 4 * (ENABLED(HYBRID_THRESHOLD)))) {
+    if (SET_MENU(TrinamicConfigMenu, MSG_TMC_DRIVERS, 5 PLUS_TERN0(STEALTHCHOP_MENU, 4) PLUS_TERN0(HYBRID_THRESHOLD_MENU, 4))) {
       #if NONE(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR, MESH_BED_LEVELING)
         BACK_ITEM(Draw_AdvancedSettings_Menu);
       #else
