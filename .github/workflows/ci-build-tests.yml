@@ -8,7 +8,7 @@ name: CI - Build Tests
 on:
   pull_request:
     branches:
-    - 2024-April!
+    - master!
     paths-ignore:
     - config/**
     - data/**
@@ -16,7 +16,7 @@ on:
     - '**/*.md'
   push:
     branches:
-    - 2024-April!
+    - master!
     paths-ignore:
     - config/**
     - data/**
@@ -26,7 +26,7 @@ on:
 jobs:
   test_builds:
     name: Build Test
-    if: github.repository == 'classicrocker883/MRiscoCProUI'
+    if: github.repository == 'wlkmanist/MRiscoCProUI_enhanced'
 
     runs-on: ubuntu-latest
 
