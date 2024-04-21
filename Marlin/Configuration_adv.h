@@ -3308,6 +3308,8 @@
     #define STEALTHCHOP_V
     #define STEALTHCHOP_W
     #define STEALTHCHOP_E
+
+    #define STEALTHCHOP_MENU    // Enable the StealthChop menu controls (352 bytes)
   #endif
 
   /**
@@ -3403,6 +3405,10 @@
   #define E5_HYBRID_THRESHOLD     30
   #define E6_HYBRID_THRESHOLD     30
   #define E7_HYBRID_THRESHOLD     30
+
+#if ENABLED(HYBRID_THRESHOLD)
+  #define HYBRID_THRESHOLD_MENU       // Enable the Hybrid Threshold menu controls
+#endif
 
   /**
    * Use StallGuard to home / probe X, Y, Z.
