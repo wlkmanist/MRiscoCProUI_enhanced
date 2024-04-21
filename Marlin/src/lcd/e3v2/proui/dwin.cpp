@@ -3745,7 +3745,7 @@ void Draw_Tune_Menu() {
 
   void Draw_AdvancedFan_menu() {
     checkkey = Menu;
-    if (SET_MENU(AdvancedFanMenu, MSG_FANS_SETTINGS, 6)) {
+    if (SET_MENU(AdvancedFanMenu, MSG_FANS_SETTINGS, 1 PLUS_TERN0(FAN_KICKSTART_MENU, 1) PLUS_TERN0(CONTROLLER_FAN_MENU, 1) PLUS_TERN0(AUTO_FAN_MENU, 3))) {
       #if NONE(AUTO_BED_LEVELING_UBL, AUTO_BED_LEVELING_BILINEAR, MESH_BED_LEVELING)
         BACK_ITEM(Draw_AdvancedSettings_Menu);
       #else
