@@ -91,15 +91,15 @@
 #endif
 
 #if ENABLED(CONTROLLER_FAN_MENU)
-  #include "../../feature/controllerfan.h"
+  #include "../../../feature/controllerfan.h"
 #endif
 
 #if ENABLED(FAN_KICKSTART_MENU)
-  #include "../../feature/kickstart.h"
+  #include "../../../feature/kickstart.h"
 #endif
 
 #if ENABLED(AUTO_FAN_MENU)
-  #include "../../feature/autofans.h"
+  #include "../../../feature/autofans.h"
 #endif
 
 #if ANY(HAS_GCODE_PREVIEW, CV_LASER_MODULE)
