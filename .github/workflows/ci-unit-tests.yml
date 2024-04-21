@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
     #- HEAD need to be tested
-    - 2024-April
+    - master
     paths-ignore:
     - config/**
     - data/**
@@ -18,7 +18,7 @@ on:
   push:
     branches:
     #- HEAD need to be tested
-    - 2024-April
+    - master
     paths-ignore:
     - config/**
     - data/**
@@ -32,7 +32,7 @@ jobs:
     name: Unit Test
     # These tests will only be able to run on the bugfix-2.1.x branch, until the next release
     # pulls them into additional branches.
-    if: github.repository == 'classicrocker883/MRiscoCProUI'
+    if: github.repository == 'wlkmanist/MRiscoCProUI_enhanced'
 
     runs-on: ubuntu-latest
 
