@@ -644,7 +644,7 @@
 
 // Below this temperature the heater will be switched off
 // because it probably indicates a broken thermistor wire.
-#define HEATER_0_MINTEMP   0  // Ender Configs
+#define HEATER_0_MINTEMP   5
 #define HEATER_1_MINTEMP   5
 #define HEATER_2_MINTEMP   5
 #define HEATER_3_MINTEMP   5
@@ -652,7 +652,7 @@
 #define HEATER_5_MINTEMP   5
 #define HEATER_6_MINTEMP   5
 #define HEATER_7_MINTEMP   5
-#define BED_MINTEMP        0  // Ender Configs
+#define BED_MINTEMP        5
 #define CHAMBER_MINTEMP    5
 
 // Above this temperature the heater will be switched off.
@@ -2476,10 +2476,10 @@
 
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z_raise }
-  #define NOZZLE_PARK_POINT { 0, 200, 50 } //changed MRiscoC Customizable by menu
+  #define NOZZLE_PARK_POINT { 0, 200, 20 } //changed MRiscoC Customizable by menu
   #define NOZZLE_PARK_MOVE          0   // Park motion: 0 = XY Move, 1 = X Only, 2 = Y Only, 3 = X before Y, 4 = Y before X
   #define NOZZLE_PARK_Z_RAISE_MIN  10   // (mm) Always raise Z by at least this distance  // MRiscoC uses Park Z Raise from 0 to avoid backlash issues
-  #define NOZZLE_PARK_XY_FEEDRATE 125   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #define NOZZLE_PARK_XY_FEEDRATE 135   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
   #define NOZZLE_PARK_Z_FEEDRATE   25   // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
 
@@ -2519,7 +2519,7 @@
  *
  *   Caveats: The ending Z should be the same as starting Z.
  */
-#define NOZZLE_CLEAN_FEATURE
+//#define NOZZLE_CLEAN_FEATURE          // (1440 bytes)
 
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
   #define NOZZLE_CLEAN_PATTERN_LINE     // Provide 'G12 P0' - a simple linear cleaning pattern
@@ -2769,7 +2769,7 @@
 //
 // This option increases encoder samples to filter out phantom encoder clicks caused by EMI noise.
 //
-//#define ENCODER_NOISE_FILTER
+#define ENCODER_NOISE_FILTER
 #if ENABLED(ENCODER_NOISE_FILTER)
   #define ENCODER_SAMPLES 10
 #endif
@@ -3466,7 +3466,7 @@
   //#define CV_LASER_MODULE
   #define HAS_GCODE_PREVIEW 1
   #define DISABLE_TUNING_GRAPH 0// Temp plot graph - PID/MPC Tuning (1624 bytes of flash)
-  //#define HAS_ESDIAG 1        // View End-stop switch continuity (560 bytes of flash)
+  #define HAS_ESDIAG 1          // View End-stop switch continuity (560 bytes of flash)
   #define HAS_CGCODE 1          // Extra Gcode options (3320 bytes of flash)
   //#define HAS_LOCKSCREEN 1    // Simple lockscreen as to not accidentally change something (568 bytes of flash)
   #define USE_GRID_MESHVIEWER 1 // Enable two mesh graph types : one (1560 bytes of flash)
@@ -3487,7 +3487,7 @@
   #define PROUI_ITEM_TRAM       // Menu item: enable Tramming Wizard (2304 bytes of flash)
   #define PROUI_MEDIASORT       // Menu item: enable/disable file list sorting (104 bytes of flash)
   #define PROUI_ITEM_ENC        // Menu item: enable to reverse encoder direction (144 bytes of flash)
-  //#define ENC_MENU_ITEM       // Menu item: faster/slower encoder rate (272 bytes of flash)
+  #define ENC_MENU_ITEM         // Menu item: faster/slower encoder rate (272 bytes of flash)
   //#define SHOW_SPEED_IND      // Menu item: blink speed in mm/s along with speed percentage (296 bytes of flash)
   //#define NO_BLINK_IND        // Disables dashboard icon blink indicator highlighted background
 
