@@ -38,6 +38,9 @@
 #if ENABLED(HYBRID_THRESHOLD)
   #define HYBRID_THRESHOLD_MENU // Enable Hybrid Threshold menu
 #endif
+#if HAS_STEALTHCHOP
+  #define STEALTHCHOP_MENU      // Enable StealthChop menu (352 bytes)
+#endif
 
 #if defined(__STM32F1__) || defined(STM32F1)//#if MB(CREALITY_V24S1_301, CREALITY_V24S1_301F4)
   #define DASH_REDRAW 1
