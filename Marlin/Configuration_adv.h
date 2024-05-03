@@ -3406,10 +3406,6 @@
   #define E6_HYBRID_THRESHOLD     30
   #define E7_HYBRID_THRESHOLD     30
 
-#if ENABLED(HYBRID_THRESHOLD)
-  #define HYBRID_THRESHOLD_MENU       // Enable the Hybrid Threshold menu controls
-#endif
-
   /**
    * Use StallGuard to home / probe X, Y, Z.
    *
