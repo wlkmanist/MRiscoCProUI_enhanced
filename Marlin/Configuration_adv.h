@@ -3308,8 +3308,6 @@
     #define STEALTHCHOP_V
     #define STEALTHCHOP_W
     #define STEALTHCHOP_E
-
-    #define STEALTHCHOP_MENU    // Enable the StealthChop menu controls (352 bytes)
   #endif
 
   /**
