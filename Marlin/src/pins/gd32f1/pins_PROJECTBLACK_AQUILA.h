@@ -79,8 +79,8 @@
 // Fans
 //
 #define FAN0_PIN                    PA0         // Nozzle Fan
-#define FAN1_PIN                    PB0         // Extruder Fan   (expansion board)
-#define FAN2_PIN                    PB1         // Controller Fan (expansion board)
+#define FAN1_PIN                    PA13        // Extruder Fan   (project.black E332 expansion board FAN1 header)
+#define FAN2_PIN                    PA14        // Controller Fan (project.black E332 expansion board FAN2 header)
 
 #ifndef E0_AUTO_FAN_PIN
   #define E0_AUTO_FAN_PIN           FAN1_PIN
@@ -89,6 +89,9 @@
   #define CONTROLLER_FAN_PIN        FAN2_PIN
 #endif
 
+#ifndef CONTROLLERFAN_SPEED_MIN
+  #define CONTROLLERFAN_SPEED_MIN   2
+#endif
 #ifndef CONTROLLERFAN_SPEED_MAX
   #define CONTROLLERFAN_SPEED_MAX   127
 #endif
