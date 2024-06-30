@@ -106,11 +106,11 @@ void ControllerFan::update() {
       if (speed > FAN_OFF_PWM) {
         if (!fan_kick_end) {
           fan_kick_end = ms + FAN_KICKSTART_TIME;
-          speed = FAN_KICKSTART_POWER;
+          speed = map(FAN_KICKSTART_POWER, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
           nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
         }
         else if (PENDING(ms, fan_kick_end)) {
-          speed = FAN_KICKSTART_POWER;
+          speed = map(FAN_KICKSTART_POWER, 0, 255, 0, CONTROLLERFAN_SPEED_MAX);
           nextFanCheck = ms + 20UL; // reduce update interval for controller fn check while Kickstart is active.
         }
       }
